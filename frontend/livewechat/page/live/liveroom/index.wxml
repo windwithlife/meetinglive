@@ -1,0 +1,37 @@
+<view class="main">
+    <swiper indicator-dots="true" autoplay="true" interval="{{interval}}" duration="{{duration}}" circular="true">
+        <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+            <swiper-item>
+                <image bindtap="tapBanner" data-id="{{index}}" src="{{item.img}}" class="slide-image" width="100%"/>
+            </swiper-item>
+        </block>
+    </swiper>
+    
+    <view class="selected">
+        <view class="select-title"><text>近期预告</text></view>
+        <view class="select-top">
+            <view class="select-top-small">
+                <navigator url="/page/component/details/details">
+                    <image src="/image/liveicon1.png"></image>
+                </navigator>
+            </view>
+            <view class="select-top-small">
+                <navigator url="/page/component/details/details">
+                    <image src="/image/liveicon2.png"></image>
+                </navigator>
+            </view>
+        </view>
+         <view class="select-title"><text>观看历史</text></view>
+        <view class="select-bottom">
+            <navigator url="/page/component/details/details">
+                <image src="/image/s3.png"></image>
+            </navigator>
+        </view>
+        <view class="select-bottom">
+            <navigator url="/page/component/details/details">
+                <image src="/image/s3.png"></image>
+            </navigator>
+        </view>
+    </view>
+    
+</view>

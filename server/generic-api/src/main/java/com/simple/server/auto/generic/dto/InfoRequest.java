@@ -2,86 +2,70 @@ package com.simple.server.auto.generic.dto;
 
 import java.io.Serializable;
 
-import com.simple.server.auto.generic.entity.*;
-import com.simple.common.api.BaseResponse;
+public class InfoRequest implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-import java.util.List;
-import java.util.ArrayList;
+    private Long              id;
 
+    private String            name;
 
-    public class InfoRequest implements Serializable {
-        private static final long serialVersionUID = 1L;
+    private String            content;
 
+    private String            tags;
 
+    private String            image;
 
-    
-    private Long id;         
-    
-    private String name;         
-    
-    private String content;         
-    
-    private String tags;         
-    
-    private String image;         
-    
-    private String title;         
-    
+    private String            title;
 
     public InfoRequest() {
-    } 
-   
+    }
 
-
-    
-       
-    public Long getId(){
+    public Long getId() {
         return this.id;
-    }   
-    public void setId(Long id){
-        this.id = id;
-    }        
-    
-       
-    public String getName(){
-        return this.name;
-    }   
-    public void setName(String name){
-        this.name = name;
-    }        
-    
-       
-    public String getContent(){
-        return this.content;
-    }   
-    public void setContent(String content){
-        this.content = content;
-    }        
-    
-       
-    public String getTags(){
-        return this.tags;
-    }   
-    public void setTags(String tags){
-        this.tags = tags;
-    }        
-    
-       
-    public String getImage(){
-        return this.image;
-    }   
-    public void setImage(String image){
-        this.image = image;
-    }        
-    
-       
-    public String getTitle(){
-        return this.title;
-    }   
-    public void setTitle(String title){
-        this.title = title;
-    }        
-    
+    }
 
-  
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getTags() {
+        return this.tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 }

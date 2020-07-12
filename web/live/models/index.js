@@ -4,7 +4,11 @@ import AuthStore from "./AuthStore";
 import MenuStore from "./MenuStore";
 import DictionaryStore from "../pages/public/dictionary/models/DictionaryStore";
 import CategoryStore from "../pages/public/category/models/CategoryStore";
-//import RoomStore from "../pages/MedicalLive/models/RoomStore";
+
+import LiveroomStore from "../pages/live/models/LiveroomStore";
+
+import LiveStore from "../pages/live/models/LiveStore";
+
 
 
 const isServer = typeof window === 'undefined'
@@ -16,7 +20,12 @@ let stores = {
     dictionaryStore: new DictionaryStore(),
     authStore:new AuthStore(),
     menuStore: new MenuStore(),
-    //roomStore: new RoomStore(),
+    
+    liveroomStore: new LiveroomStore(),
+    
+    liveStore: new LiveStore(),
+    
+    
 }   
 
 

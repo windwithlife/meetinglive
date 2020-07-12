@@ -4,6 +4,7 @@ import { Form, Card, Input, Button, Select } from 'antd';
 import router from 'next/router';
 import XSelect from '../common/components/select';
 const { TextArea } = Input;
+import Upload from '../common/components/FileUpload';
 
 @inject('liveroomStore')
 @observer
@@ -44,17 +45,22 @@ export default class AddPage extends React.Component {
 
    
    
-                          < Form.Item name="name" label="Name">
-                           <Input />
-                          </Form.Item>
-
-   
-                            < Form.Item name="image" label="Image">
+                            < Form.Item name="image" label="直播间图片">
                             <Upload filename="imagefile" uploadAction='/imageupload' onEnd={this.onUploadEnd.bind(that,"image")} onError={this.onUploadError} />
                             </Form.Item>
    
    
                           < Form.Item name="liveUrl" label="直播流端点URL">
+                           <Input />
+                          </Form.Item>
+
+   
+                          < Form.Item name="description" label="直播间相关资讯">
+                           <Input />
+                          </Form.Item>
+
+   
+                          < Form.Item name="name" label="名称">
                            <Input />
                           </Form.Item>
 

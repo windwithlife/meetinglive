@@ -70,7 +70,7 @@ export default class DetailPage extends React.Component {
         if (!id){return;}
         this.Store().queryById(id, function (values) {
             console.log(values);
-            that.formRef.current.setFieldsValue(values);
+            //that.formRef.current.setFieldsValue(values);
         });
     }
 
@@ -114,16 +114,20 @@ export default class DetailPage extends React.Component {
                             {itemData.id}
                           </Form.Item>
 
-                          < Form.Item label="Name">
-                            {itemData.name}
-                          </Form.Item>
-
-                          < Form.Item label="Image">
+                          < Form.Item label="直播间图片">
                             {itemData.image}
                           </Form.Item>
 
                           < Form.Item label="直播流端点URL">
                             {itemData.liveUrl}
+                          </Form.Item>
+
+                          < Form.Item label="直播间相关资讯">
+                            {itemData.description}
+                          </Form.Item>
+
+                          < Form.Item label="名称">
+                            {itemData.name}
                           </Form.Item>
 
                         </Form>

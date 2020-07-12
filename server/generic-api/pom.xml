@@ -11,10 +11,10 @@
         <version>1.0</version>
     </parent>
  
-    <artifactId>service-api</artifactId>
-    <name>Service-API</name>
+    <artifactId>generic-api</artifactId>
+    <name>Generic-API</name>
     <version>1.0.0</version>
-    <description>Service API/DTO for sharing between Client/Server</description>
+    <description>Generic API/DTO for sharing between Client/Server</description>
  
     <dependencies>
         <dependency>

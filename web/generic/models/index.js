@@ -63,9 +63,7 @@ export function initializeStore (name,initialData) {
             return  composeStores(name, initialData)
         }else{
             return  composeStores();
-        }
-        
-      
+        } 
     }
 }
 

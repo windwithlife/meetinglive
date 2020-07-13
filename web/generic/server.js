@@ -9,8 +9,9 @@ var bodyParser = require('body-parser');
 const rewrite = require('express-urlrewrite');
 var config = require('./config/config');
 var uploadRootPath = config['current'].UPLOAD_PATH;
-console.log("current upload root path"  + uploadRootPath);
 var fileupload = require('./utils/fileupload').fileupload;
+const logger = require("./tool_server/logger")(__filename);
+
 
 
 app.prepare()
@@ -31,7 +32,7 @@ app.prepare()
     server.post('/profile', fileupload.single('avatar'), function (req, res, next) {
       // req.file is the `avatar` file
       // req.body will hold the text fields, if there were any
-      console.log('[upload filename:' + JSON.stringify(req.file) + "]");
+      logger.info('[upload filename:' + JSON.stringify(req.file) + "]")
       res.json({
         code: true,
         filename: req.file.filename,
@@ -43,7 +44,7 @@ app.prepare()
     server.post('/imageupload', fileupload.single('imagefile'), function (req, res, next) {
       // req.file is the `avatar` file
       // req.body will hold the text fields, if there were any
-      console.log('[upload filename:' + JSON.stringify(req.file) + "]");
+      logger.info('[upload filename:' + JSON.stringify(req.file) + "]")
       res.json({
         code: true,
         filename: req.file.filename,
@@ -52,14 +53,9 @@ app.prepare()
       });
     });
 
-    server.get('/test', (req, res) => {
-      console.log(req.body);
-      res.sendStatus(200)
-    });
-    ;
+
 
     server.get('/posts/:id', (req, res) => {
-      console.log('poes');
       return app.render(req, res, '/posts', { id: req.params.id })
     })
 
@@ -69,6 +65,6 @@ app.prepare()
 
     server.listen(port, (err) => {
       if (err) throw err
-      console.log(`> Ready on http://localhost:${port}`)
+      logger.info(`> Ready on http://localhost:${port}`);
     })
   })

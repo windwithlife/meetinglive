@@ -10,7 +10,8 @@
     "page/component/orders/orders",
     "page/component/details/details",
     "page/component/list/list",
-    "page/component/search/search"
+    "page/component/search/search",
+    "page/video/video"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -32,7 +33,7 @@
         "text": "主页"
       },
       {
-        "pagePath": "page/live/liveroom/index",
+        "pagePath": "page/video/video",
         "iconPath": "image/22.png",
         "selectedIconPath": "image/21.png",
         "text": "会议直播"

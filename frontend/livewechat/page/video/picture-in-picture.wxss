@@ -1,0 +1,4 @@
+.desc{
+    text-decoration: underline;
+    text-align: center;
+}

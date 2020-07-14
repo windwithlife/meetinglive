@@ -40,8 +40,11 @@ export default class Wrap extends React.Component {
     const path = router.pathname;
     if(path == '/_error') return {};
     //根据url来匹配选中哪一个head 以及head下面的子项  
-    let pathArr = path.match(/(?<=\/)\w+/g);
-    let selectedHead = headerMenus.find(item=>item.id == pathArr[0])
+    let pathArr = [],
+        selectedHead = {};
+    pathArr = path.match(/(?<=\/)\w+/g);
+    if(!!pathArr) selectedHead = headerMenus.find(item=>item.id == pathArr[0]);
+    else pathArr = [];
     return {
       childrenList:selectedHead?.childrenList || [],
       pathArr,

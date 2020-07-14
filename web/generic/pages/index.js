@@ -1,3 +1,5 @@
+// import MyComponent from "/Users/zhangfan/CtripProjects/gs_online_ui/dist/index"
+
 export default function(props){
     return (
         <>
@@ -8,8 +10,7 @@ export default function(props){
             `}
             </style>
             <h1>this is index page</h1>
-            <h1>this is index page</h1>
-            <h1>this is index page</h1>
+            {/* <MyComponent></MyComponent> */}
         </>
     )
 }

@@ -1,8 +1,7 @@
 import { Layout, Menu} from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined} from '@ant-design/icons';
+import { AppstoreOutlined} from '@ant-design/icons';
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
-import router from 'next/router';
 
 
 const headerMenus = [
@@ -66,7 +65,7 @@ export default class Wrap extends React.Component {
   }
 
   render() {
-    const {childrenList,pathArr} = this.props;
+    const {childrenList=[],pathArr=[]} = this.props;
     function getSiderMenusDom(children){
       let arr = [];
       for(let i=0;i<children.length;i++){
@@ -88,7 +87,6 @@ export default class Wrap extends React.Component {
       }
       return arr;
     }
-    let SiderMenus =  getSiderMenusDom(childrenList)
 
     return (
       <>
@@ -101,10 +99,10 @@ export default class Wrap extends React.Component {
           <Content style={{height:'calc(100% - 34px)',overflow:'auto'}}>
             <Layout style={{height:'100%'}}>
               {
-                childrenList.length && (
+                !!childrenList.length && (
                   <Sider style={{ background: "#fff" }}>
                     <Menu onClick={this.handleClick.bind(this)} defaultSelectedKeys={[pathArr.join('_')]} mode="inline">
-                      { SiderMenus }
+                      { getSiderMenusDom(childrenList) }
                     </Menu>
                   </Sider>
                 )

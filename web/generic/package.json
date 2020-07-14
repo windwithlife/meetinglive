@@ -31,5 +31,6 @@
     "@babel/plugin-proposal-decorators": "^7.1.0",
     "express-urlrewrite": "^1.2.0",
     "webpack": "^4.29.3"
-  }
+  },
+  "optionalDependencies": {}
 }

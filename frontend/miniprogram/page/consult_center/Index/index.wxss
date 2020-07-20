@@ -1,0 +1,25 @@
+.info_center_con{
+    display: flex;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    font-size: 32rpx;
+    margin-bottom: 20rpx;
+}
+.info_center_left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;   
+    word-wrap: break-word;
+    width:calc(100% - 280rpx);
+}
+.info_center_left_desc{
+
+}
+.info_center_right{
+    width: 280rpx;
+    height: 280rpx;
+}
+.image{
+    width: 100%;
+    height: 100%;
+}

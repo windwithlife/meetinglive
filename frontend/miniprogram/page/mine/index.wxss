@@ -1,0 +1,21 @@
+.mine_con{
+  
+}
+.line_con{
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    padding-bottom: 4rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1rpx solid black;
+    height: 120rpx;
+}
+.line_con_right{
+
+}
+
+.image_con{
+    width: 120rpx;
+    height: 120rpx;
+}

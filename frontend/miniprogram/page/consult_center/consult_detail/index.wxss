@@ -1,0 +1,7 @@
+.consult_detail_con{
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+}
+.consult_detail_head{
+    font-size: 48rpx;
+}

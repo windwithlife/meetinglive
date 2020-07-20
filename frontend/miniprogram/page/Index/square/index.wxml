@@ -1,0 +1,44 @@
+<block>
+    <swiper indicator-dots="true" autoplay="true" interval="3000" duration="800" circular="true">
+        <block wx:for="{{swiperData}}" wx:key="*this" >
+            <swiper-item>
+                <image bindtap="tapBanner"  src="{{item.img}}" class="slide_image"/>
+            </swiper-item>
+        </block>
+    </swiper>
+
+    <view class="live_dlivery_con">
+        <text class="live_dlivery_desc">直播速递</text>
+        <scroll-view  scroll-x="true"  style="width: 100%;white-space: nowrap;">
+            <!-- <button type="getPhoneNumber"> -->
+                <view bindtap="liveClick" class="live_dlivery_swiper_con" wx:for="{{liveDlivery}}" wx:key="*this" >
+                    <image mode="scaleToFill" class="slide_image"  src="{{item.img}}"/>
+                    <text class="live_dlivery_swiper_desc">直播中</text>
+                </view>
+            <!-- </button> -->
+        </scroll-view>
+    </view>
+
+    <view class="playback_con">
+        <view class="playback_head_con">
+            <text>精彩回放</text>
+            <text class=" icon-moreinfo-copy iconfont">更多</text>
+        </view>
+        <view class="playback_contnet_con">
+            <view class="playback_item_con"  wx:for="{{playback}}" wx:key="*this" >
+                <view class="playback_item_left">
+                    <image mode="scaleToFill" class="slide_image"   src="{{item.img}}"/>
+                </view>
+               <view class="playback_item_right">
+                    <view class="playback_item_right_one_line">(中国标准时间) sitemap 索引情况提示</view>
+                    <view class="iconfont icon-yonghutouxiang playback_item_right_two_line">
+                        <view class="playback_item_right_user playback_item_right_three_line">李四 主治医生</view>
+                        <view>2011年1月，微信1.0发布</view>
+                    </view>
+               </view>
+            </view>
+        </view>
+    </view>
+  
+ 
+</block>

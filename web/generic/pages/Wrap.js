@@ -1,112 +1,64 @@
-import { Layout, Menu} from 'antd';
-import { AppstoreOutlined} from '@ant-design/icons';
-const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+import { Layout, Menu } from 'antd';
+const { Content, Sider, Footer } = Layout;
+import "./styles/wrap.less"
 
 
-const headerMenus = [
-  {
-    id: 'info',
-    name: "信息管理",
-    url: "/info/add",
-    childrenList: [
-      {
-        id: 'info_add',
-        name: "信息添加",
-        url: "/info/add",
-      },
-      {
-        id: 'info_delete',
-        name: "信息删除",
-        url: "/info/delete",
-      },
-    ]
-  },
-  {
-    id: 'live',
-    name: "视频管理",
-    url: "/live/add",
-    childrenList: [{
-      id: 'live_add',
-      name: "视频添加",
-      url: "/live/add",
-    }]
-  },
-]
+
+const menuList = [{
+    desc:"讲座设置",
+    key:"lecture_setting", //匹配以 /lecture_setting开头的所有路由
+  },{
+    desc:"讲师设置",
+    key:"teacher_setting",
+  },{
+    desc:"广告设置",
+    key:"advertise_setting",
+  },{
+    desc:"咨询编辑",
+    key:"consult_edit",
+  }]
+
+function Head(props){
+  return (
+    <div className="head_con">
+      <div className="head_con_left">
+        XX医疗运营后台
+      </div>
+      <div className="head_con_right">
+        <div>18621085656</div>
+        <div></div>
+      </div>
+    </div>
+  )
+}
 
 export default class Wrap extends React.Component {
-  static async getInitialProps(router) {
-    const path = router.pathname;
-    if(path == '/_error') return {};
-    //根据url来匹配选中哪一个head 以及head下面的子项  
-    let pathArr = [],
-        selectedHead = {};
-    pathArr = path.match(/(?<=\/)\w+/g);
-    if(!!pathArr) selectedHead = headerMenus.find(item=>item.id == pathArr[0]);
-    else pathArr = [];
-    return {
-      childrenList:selectedHead?.childrenList || [],
-      pathArr,
-    }
+  static async getInitialProps(router){
+    const {pathname,query,asPath,basePath,}  = router;
+    const pathArr = asPath.replace(/\//,"").split('/');
+    return { pathArr,asPath }
   }
-  
+
   handleClick = ({ item, key, keyPath, domEvent }) => {
-    let menuItem = null;
-    function getMenuItem(list){
-      for(let i=0;i<list.length;i++){
-        if(list[i].id == key) { menuItem = list[i];  return;}
-        if(list[i].childrenList) getMenuItem(list[i].childrenList);
-      }
-    }
-    getMenuItem(headerMenus);
-    if(!!menuItem){
-      location.href = `${location.origin}${menuItem.url}`
-    }
+    location.href = `${location.origin}/${key}`
   }
 
   render() {
-    const {childrenList=[],pathArr=[]} = this.props;
-    function getSiderMenusDom(children){
-      let arr = [];
-      for(let i=0;i<children.length;i++){
-        let nowItem = children[i];
-        let child =  nowItem?.childrenList || [];
-        if(child.length){
-          arr.push(
-            (
-              <SubMenu icon={<AppstoreOutlined />} key={nowItem.id} title={nowItem.name}>
-                {getSiderMenusDom(child)}
-              </SubMenu>
-            )
-          )
-        }else{
-          arr.push(
-            (<Menu.Item key={nowItem.id}>{nowItem.name}</Menu.Item>)
-          )
-        }
-      }
-      return arr;
-    }
-
+    const {pathArr} = this.props;
+    const defaultSelectedKeys = pathArr[0] || ''
     return (
       <>
-        <Layout style={{height:'100%'}}>
-          <Header className="header">
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[`${pathArr[0]}`]} onClick={this.handleClick.bind(this)}>
-              {headerMenus.map((menu) => <Menu.Item key={menu.id}>{menu.name}</Menu.Item>)}
-            </Menu>
-          </Header>
-          <Content style={{height:'calc(100% - 34px)',overflow:'auto'}}>
-            <Layout style={{height:'100%'}}>
-              {
-                !!childrenList.length && (
-                  <Sider style={{ background: "#fff" }}>
-                    <Menu onClick={this.handleClick.bind(this)} defaultSelectedKeys={[pathArr.join('_')]} mode="inline">
-                      { getSiderMenusDom(childrenList) }
-                    </Menu>
-                  </Sider>
-                )
-              }
+        <Layout style={{ height: '100%' }}>
+          <Head></Head>
+          <Content style={{ height: 'calc(100% - 34px)', overflow: 'auto' }}>
+            <Layout style={{ height: '100%' }}>
+              <Sider style={{ background: "#fff" }}>
+                <Menu onClick={this.handleClick.bind(this)} defaultSelectedKeys={[defaultSelectedKeys]} mode="inline">
+                  {
+                    menuList.map((item)=> <Menu.Item key={item.key}>{item.desc}</Menu.Item>)
+                  }
+                </Menu>
+              </Sider>
               <Content>
                 {this.props.children}
               </Content>
@@ -118,17 +70,4 @@ export default class Wrap extends React.Component {
     )
   }
 }
-
-
-
-
-
- {/* <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-                        <Menu.Item key="5">Option 5</Menu.Item>
-                        <Menu.Item key="6">Option 6</Menu.Item>
-                        <SubMenu key="sub3" title="Submenu">
-                          <Menu.Item key="7">Option 7</Menu.Item>
-                          <Menu.Item key="8">Option 8</Menu.Item>
-                        </SubMenu>
-                      </SubMenu> */}
 

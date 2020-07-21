@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/lectureSetting.less"
+import "../styles/consultEdit.less"
 import { Button } from 'antd';
 
 
@@ -11,13 +11,13 @@ export default class LectureSetting extends React.Component{
         super(props)
     }
     lookDetail(){
-        location.href = `${location.origin}/lecture_setting/lecture_detail`;
+        location.href = `${location.origin}/consult_edit/consult_detail`;
     }
     publish(){
 
     }
     newSetUp(){
-        location.href = `${location.origin}/lecture_setting/newBuildLecture`;
+        location.href = `${location.origin}/consult_edit/add_cnosult`;
     }
     render(){
         return(

@@ -26,7 +26,7 @@ function Head(props){
       </div>
       <div className="head_con_right">
         <div>18621085656</div>
-        <div></div>
+        <div className="exit">退出</div>
       </div>
     </div>
   )

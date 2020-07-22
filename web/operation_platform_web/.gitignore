@@ -6,6 +6,7 @@ target/
 *.iml
 package-lock.json
 .git.swp
+
 # Logs
 logs
 *.log

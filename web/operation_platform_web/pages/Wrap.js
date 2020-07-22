@@ -44,19 +44,19 @@ export default class Wrap extends React.Component {
   }
 
   render() {
-    const {pathArr} = this.props;
+    const {pathArr,asPath} = this.props;
+    
     const defaultSelectedKeys = pathArr[0] || ''
+    if(asPath == '/')  return  ( <>{this.props.children}</> )
     return (
-      <>
+      <>   
         <Layout style={{ height: '100%' }}>
           <Head></Head>
           <Content style={{ height: 'calc(100% - 34px)', overflow: 'auto' }}>
             <Layout style={{ height: '100%' }}>
               <Sider style={{ background: "#fff" }}>
                 <Menu onClick={this.handleClick.bind(this)} defaultSelectedKeys={[defaultSelectedKeys]} mode="inline">
-                  {
-                    menuList.map((item)=> <Menu.Item key={item.key}>{item.desc}</Menu.Item>)
-                  }
+                  { menuList.map((item)=> <Menu.Item key={item.key}>{item.desc}</Menu.Item>) }
                 </Menu>
               </Sider>
               <Content>

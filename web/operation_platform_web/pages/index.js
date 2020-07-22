@@ -15,7 +15,7 @@ export default class Login extends React.Component{
         super(props);
     }
     onFinish = values => {
-        console.log('Success:', values);
+        location.href = `${location.origin}/lecture_setting`
     };
     
     onFinishFailed = errorInfo => {
@@ -41,7 +41,7 @@ export default class Login extends React.Component{
                         <Input.Password />
                     </Form.Item>
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
+                        <Button  type="primary" htmlType="submit">
                             Submit
                         </Button>
                     </Form.Item>

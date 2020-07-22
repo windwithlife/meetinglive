@@ -4,6 +4,7 @@
   "scripts": {
     "devx": "export NODE_ENV=development && node server.js",
     "build": "next build",
+    "export": "next export",
     "start": "export NODE_ENV=production && node server.js"
   },
   "dependencies": {

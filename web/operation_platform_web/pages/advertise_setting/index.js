@@ -1,11 +1,15 @@
 import React from "react";
 import "../styles/advertiseSetting.less"
 import { Button } from 'antd';
+import {invoke_post} from "../../common/index"
 
 
 export default class LectureSetting extends React.Component{
     static async getInitialProps({router ,req ,res, initializeStoreObj}) {
         return {}
+    }
+    componentDidMount(){
+        invoke_post('advertService/getAdvertList')
     }
     constructor(props){
         super(props)

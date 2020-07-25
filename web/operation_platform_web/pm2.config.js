@@ -14,7 +14,7 @@ module.exports = {
         merge_logs: true,
         log_date_format: 'YYYY-MM-DD HH:mm:ss',
         instances:"1", //负载均衡   根据机器CPU核数，开启对应数目的进程运行项目
-        // exec_mode : "cluster"
+        exec_mode : "cluster"
     }]
 }
 

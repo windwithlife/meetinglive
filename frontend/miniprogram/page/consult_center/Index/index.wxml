@@ -1,13 +1,13 @@
 <block>
-    <navigator url="/page/consult_center/consult_detail/index" class="info_center_con" wx:for="{{infoArr}}" wx:key="*this" >
+    <navigator url="/page/consult_center/consult_detail/index" class="info_center_con" wx:for="{{informationList}}" wx:key="*this" >
         <view class="info_center_left">
-            <view class="info_center_left_desc">如果列表中项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态</view>
+            <view class="info_center_left_desc">{{item.advTitle}}</view>
             <view class="iconfont icon-yanjing">
-                2000
+                {{item.clickNumber}}
             </view>
         </view>
         <view class="info_center_right">
-            <image mode="scaleToFill" class="image"  src="{{item.img}}"/>
+            <image mode="scaleToFill" class="image"  src="{{item.advPicPath}}"/>
         </view>
     </navigator>
 </block>

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import "./styles/index.less";
+import {invoke_post} from "../common/index"
+
+
 
 const layout = {
   labelCol: { span: 8 },
@@ -14,8 +17,12 @@ export default class Login extends React.Component{
     constructor(props){
         super(props);
     }
-    onFinish = values => {
-        location.href = `${location.origin}/lecture_setting`
+    onFinish = valueObj => {
+        const {password,username} = valueObj;
+        invoke_post('userService/userLogin',{
+            password,username
+        })
+        // location.href = `${location.origin}/lecture_setting`
     };
     
     onFinishFailed = errorInfo => {

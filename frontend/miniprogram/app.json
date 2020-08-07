@@ -6,6 +6,9 @@
     "page/consult_center/consult_detail/index",
     "page/mine/index"
   ],
+  "usingComponents": {
+    "van-dialog": "@vant/weapp/dialog/index"
+  },
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "会议平台",
@@ -23,13 +26,7 @@
         "pagePath": "page/Index/square/index",
         "iconPath": "images/12.png",
         "selectedIconPath": "images/11.png",
-        "text": "讲座"
-      },
-      {
-        "pagePath":  "page/consult_center/Index/index",
-        "iconPath": "images/32.png",
-        "selectedIconPath": "images/31.png",
-        "text": "资讯"
+        "text": "会议"
       },
       {
         "pagePath": "page/mine/index",

@@ -3,12 +3,56 @@
 .page-body{
   position: relative;
 }
+.info_get_con{
+  position: absolute;
+  background-color:rgb(174 174 174 / 0.6);
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+}
+.info_get{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  width: 80%;
+  background-color:#fff;
+  transform: translate(-50%,-50%);
+}
+.info_get_title{
+  text-align: center;
+  font-size: 38rpx;
+  font-weight: bold;
+}
+.info_get_submit{
+  height: 28rpx;
+  line-height: 28rpx;
+  text-align: center;
+  margin-top: 3rpx;
+  border-top: 1rpx solid #aeaeae;
+  padding: 30rpx;
+}
+.info_get_content_con{
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx;
+}
+.info_get_content_con_l{
+  width:20%;
+}
+.info_get_content_con_r_province{
+  text-align: right;
+  flex-grow: 1;  
+}
+.info_get_content_con_r{
+  border: 1px solid;
+  flex-grow: 1;  
+}
 .mantle_con{
   position: absolute;
   top:0;
   height: 225px;
   background-color:rgba(15, 41, 77, 0.5);
-  width: calc(100% - 38rpx);
+  width: 100%;
   z-index: 9;
 }
 video {

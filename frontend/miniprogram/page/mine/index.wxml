@@ -1,11 +1,13 @@
 <view class="mine_con">
-    <view class="line_con">
-        <view class="line_con_left">头像</view>
-        <view class="line_con_right image_con">
-            <open-data type="userAvatarUrl"></open-data>
+    <van-dialog id="van-dialog" />
+    <view wx:for="{{result}}" class="line_con">
+        <view class="line_con_left">{{item.left}}</view>
+        <view class="line_con_right">
+            <text wx:if="{{item.left != '头像'}}">{{item.right}}</text>
+            <image class="line_con_right_pic" wx:if="{{item.left == '头像'}}" src="{{item.right}}"></image>
         </view>
     </view>
-    <view class="line_con">
+    <!-- <view class="line_con">
         <view class="line_con_left">昵称</view>
         <view class="line_con_right">
             <open-data type="userNickName"></open-data>
@@ -16,48 +18,6 @@
         <view class="line_con_right" >
             <open-data lang="zh_CN" type="userGender" id="userGender"></open-data>
         </view>
-    </view>
-    <view class="line_con">
-        <view class="line_con_left">所在城市</view>
-        <!-- <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
-            <view class="picker">
-              当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
-            </view>
-          </picker> -->
-        <view class="line_con_right">
-            <open-data lang="zh_CN" type="userCountry"></open-data>
-            <text>-</text>
-            <open-data lang="zh_CN" type="userProvince"></open-data>
-            <text>-</text>
-            <open-data lang="zh_CN" type="userCity"></open-data>
-        </view>
-    </view>
-
-    <view class="line_con">
-        <view class="line_con_left">所在医院</view>
-        <view class="line_con_right" bindtap="changeHospitaIsShow">
-            {{hospitalDesc}}
-        </view>
-    </view>
-
-    <view class="line_con">
-        <view class="line_con_left">职称</view>
-        <view class="line_con_right" bindtap="changeTitleIsShow">
-            {{titleDesc}}
-        </view>
-    </view>
-
-
-
-    <van-popup show="{{ hospitalIsShow }}" position="bottom" custom-style="height: 50%;" bind:close="changeHospitaIsShow">
-        <van-picker confirm-button-text="确认" cancel-button-text="取消" title="所在医院" columns="{{ hospitalArr }}" 
-        bind:confirm="bindHospitalPickerChange" show-toolbar="true" bind:cancel="changeHospitaIsShow"/>
-    </van-popup>
-
-
-    <van-popup show="{{ titleIsShow }}" position="bottom" custom-style="height: 50%;" bind:close="changeTitleIsShow">
-        <van-picker confirm-button-text="确认" cancel-button-text="取消" title="职级" columns="{{ titleArray }}" 
-        bind:confirm="bindTitlePickerChange" show-toolbar="true" bind:cancel="changeTitleIsShow"/>
-    </van-popup>
+    </view>  -->
   
 </view>

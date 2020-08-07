@@ -1,19 +1,16 @@
+import {invoke_post} from "../../common/tools"
 Page({
     data: {
-        infoArr:[
-            {
-                img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-            },
-            {
-                img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-            },            {
-                img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-            },            {
-                img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-            },            {
-                img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-            }
-        ]
     },
-
+    onLoad(objectQuery){
+        const {id} = objectQuery;
+        
+        invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getInformationDetail',{
+            id,
+        },(result)=>{
+            console.log('result: ', result);
+        },(errorMsg)=>{
+          console.log('errorMsg: ', errorMsg);
+        })
+      },
   })

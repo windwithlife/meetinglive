@@ -1,5 +1,10 @@
 <block>
-    <swiper indicator-dots="true" autoplay="true" interval="3000" duration="800" circular="true">
+    <van-dialog id="van-dialog" />
+    <view wx:if="{{isShowLogin}}">
+        <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">登录</button>
+        <button open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">信息授权</button>
+    </view>
+    <!-- <swiper indicator-dots="true" autoplay="true" interval="3000" duration="800" circular="true">
         <block class="slide_image_con" wx:for="{{pageBannerList}}" wx:key="*this">
             <swiper-item>
                 <image bindtap="tapBanner" src="{{item.advPicPath}}" class="slide_image" />
@@ -7,9 +12,9 @@
             </swiper-item>
 
         </block>
-    </swiper>
+    </swiper> -->
 
-    <view class="live_dlivery_con">
+    <!-- <view wx:if="{{!!liveStartList.length}}" class="live_dlivery_con">
         <text class="live_dlivery_desc">直播速递</text>
         <scroll-view scroll-x="true" style="width: 100%;white-space: nowrap;">
             <view bindtap="liveClick" class="live_dlivery_swiper_con" wx:for="{{liveStartList}}" wx:key="*this">
@@ -21,23 +26,26 @@
                 <view>{{item.userTrueName}} {{item.positionName}}</view>
             </view>
         </scroll-view>
-    </view>
+    </view> -->
 
-    <view class="playback_con">
-        <view class="playback_head_con">
+    <view wx:if="{{!!liveStartList.length}}" class="playback_con">
+        <!-- <view class="playback_head_con">
             <text>精彩回放</text>
             <text class="icon-moreinfo-copy iconfont">更多</text>
-        </view>
+        </view> -->
         <view class="playback_contnet_con">
-            <view class="playback_item_con" wx:for="{{liveHistoryList}}" wx:key="*this">
+            <view  bindtap="doClick" data-id="{{item.id}}" class="playback_item_con"  wx:for="{{liveStartList}}" wx:key="*this">
                 <view class="playback_item_left">
                     <image mode="scaleToFill" class="slide_image" src="{{item.roomPicPath}}" />
+                    <text wx:if="{{item.roomStatus == 0}}" class="playback_item_left_text">{{item.liveStartDate}}直播</text>
+                    <text wx:if="{{item.roomStatus == 1}}" class="playback_item_left_text">直播中</text>
+                    <text wx:if="{{item.roomStatus == 2}}" class="playback_item_left_text">已结束</text>
                 </view>
                 <view class="playback_item_right">
                     <view class="playback_item_right_one_line">{{item.roomTitle}}</view>
-                    <view class="iconfont icon-yonghutouxiang playback_item_right_two_line">
-                        <view class="playback_item_right_user playback_item_right_three_line">{{item.userTrueName}} {{item.positionName}}</view>
-                        <view class="icon-shipin iconfont">
+                    <view class="iconfont playback_item_right_two_line">
+                        <!-- <view class="playback_item_right_user playback_item_right_three_line">{{item.userTrueName}} {{item.positionName}}</view> -->
+                        <view wx:if="{{!!item.playNumber}}" class="icon-shipin iconfont">
                             <view class="playback_item_right_user_2">{{item.playNumber}}</view>
                         </view>
                     </view>

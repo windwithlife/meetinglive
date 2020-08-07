@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import "./styles/index.less";
-import {invoke_post} from "../common/index"
+import { Form, Input, Button, Checkbox ,Modal} from 'antd';
 
+
+import "./styles/index.less";
+import {invoke_post,Loading} from "../common/index"
 
 
 const layout = {
@@ -17,33 +18,30 @@ export default class Login extends React.Component{
     constructor(props){
         super(props);
     }
-    onFinish = valueObj => {
-        const {password,username} = valueObj;
-        invoke_post('userService/userLogin',{
-            password,username
-        })
-        // location.href = `${location.origin}/lecture_setting`
-    };
-    
-    onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
+    async onFinish(valueObj){
+        try{
+            const {userPassword,userName} = valueObj;
+            invoke_post('https://service.koudaibook.com/meeting-server/pc/userService/userLogin',{ userPassword,userName})
+        }catch(error){
+            console.error('onFinish-error: ', error);
+        }
+    }
+
     render(){
         return (
             <div className="con">  
                 <h1>
-                    XX医疗运营后台
+                    E健云运营后台
                 </h1>
                 <Form  {...layout} name="basic" initialValues={{ remember: true, }} 
                     onFinish={this.onFinish.bind(this)}
-                    onFinishFailed={this.onFinishFailed.bind(this)}
                 >
-                    <Form.Item label="Username" name="username"
+                    <Form.Item label="Username" name="userName"
                         rules={[{ required: true, message: 'Please input your username!' }]}>
                         <Input />
                     </Form.Item>
                     
-                    <Form.Item label="Password" name="password"
+                    <Form.Item label="Password" name="userPassword"
                         rules={[{ required: true, message: 'Please input your password!'}]}>
                         <Input.Password />
                     </Form.Item>

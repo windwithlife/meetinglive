@@ -24,7 +24,7 @@ app.prepare()
     server.get('*', (req, res) => {
       return handle(req, res)
     })
-    const LOCAL_IP = getIPAddress()
+    const LOCAL_IP = getIPAddress();
     server.listen(port, (err) => {
       if (err) throw err
       logger.info(`> Ready on http://${LOCAL_IP}:${port}`);

@@ -32,16 +32,22 @@ public class ApplicationConfig {
     /**文件访问目录*/
     public static String upload_file_path;
     
-    /**腾讯云直播获取推流地址*/
+    /**腾讯云推流域名*/
     public static String tecentCloud_live_pushServerurl;
-    /**腾讯云拉流域名地址*/
+    /**腾讯云拉流域名*/
     public static String tecentCloud_live_pullServerurl;
+    /**推、拉流路径(默认是live)*/
+    public static String tecentCloud_live_appName;
     /**推流防盗链Key*/
     public static String tecentCloud_live_safeChain;
     /**推流房间名前缀*/
     public static String tecentCloud_live_StreamNamePrefix;
     /**直播回调通知秘钥*/
     public static String tecentCloud_live_notifyUrlKey;
+    /**腾讯云API秘钥key*/
+    public static String tecentCloud_live_SecretId;
+    /**腾讯云API秘钥value*/
+    public static String tecentCloud_live_SecretKey;
 
     @Value("${wechat.xcx.meetinglive.appId}")
     public void setWecaht_meetinglive_appid(String wecaht_meetinglive_appid) {
@@ -116,6 +122,21 @@ public class ApplicationConfig {
     @Value("${tecentCloud.live.notifyUrlKey}")
     public void setTecentCloud_live_notifyUrlKey(String tecentCloud_live_notifyUrlKey) {
         ApplicationConfig.tecentCloud_live_notifyUrlKey = tecentCloud_live_notifyUrlKey;
+    }
+
+    @Value("${tecentCloud.live.SecretId}")
+    public void setTecentCloud_live_SecretId(String tecentCloud_live_SecretId) {
+        ApplicationConfig.tecentCloud_live_SecretId = tecentCloud_live_SecretId;
+    }
+
+    @Value("${tecentCloud.live.SecretKey}")
+    public void setTecentCloud_live_SecretKey(String tecentCloud_live_SecretKey) {
+        ApplicationConfig.tecentCloud_live_SecretKey = tecentCloud_live_SecretKey;
+    }
+
+    @Value("${tecentCloud.live.appName}")
+    public void setTecentCloud_live_appName(String tecentCloud_live_appName) {
+        ApplicationConfig.tecentCloud_live_appName = tecentCloud_live_appName;
     }
 
 }

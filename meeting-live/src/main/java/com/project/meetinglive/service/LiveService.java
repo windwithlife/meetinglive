@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.meetinglive.common.util.BaseUtil;
 import com.project.meetinglive.common.util.DateUtil;
 import com.project.meetinglive.common.util.FileUploadHelp;
+import com.project.meetinglive.core.Live.LiveClientHelp;
 import com.project.meetinglive.core.Live.TecentCloudUtils;
 import com.project.meetinglive.core.config.ApplicationConfig;
 import com.project.meetinglive.core.data.pageBean.SinglePageBean;
@@ -113,7 +114,9 @@ public class LiveService {
         //推流过期时间
         Date pushExpireDate = DateUtil.getSomeSecondDate(txTime.intValue());
         //step3.2:推流服务器地址
-        String pushServerUrl = ApplicationConfig.tecentCloud_live_pushServerurl;
+        String pushServerUrl = "rtmp://" + ApplicationConfig.tecentCloud_live_pushServerurl
+                               + File.separator + ApplicationConfig.tecentCloud_live_appName
+                               + File.separator;
         //step3.3:房间ID
         String roomCode = ApplicationConfig.tecentCloud_live_StreamNamePrefix + "_" + id;
         //step3.4:推流秘钥
@@ -221,6 +224,9 @@ public class LiveService {
         }
         if (operationType == 2) {
             paramMap.put("roomStatus", 2);
+            //step3.1:调用腾讯api断开直播
+            LiveClientHelp.dropLiveStream(ApplicationConfig.tecentCloud_live_pushServerurl,
+                ApplicationConfig.tecentCloud_live_appName, liveRoomModel.getRoomCode());
         }
         if (operationType == 3) {
             paramMap.put("publishStatus", 2);

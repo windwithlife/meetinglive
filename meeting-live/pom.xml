@@ -167,6 +167,12 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- 腾讯云直播 -->
+		<dependency>
+		    <groupId>com.tencentcloudapi</groupId>
+		    <artifactId>tencentcloud-sdk-java</artifactId>
+		    <version>3.1.109</version>
+		</dependency>
 	</dependencies>
 
 	<build>

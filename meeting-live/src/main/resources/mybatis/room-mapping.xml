@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.project.meetinglive.dao.RoomDao">
+    <!-- 获取首页直播速递@author hejinguo -->
+    <select id="getLiveStartList"  resultType="com.project.meetinglive.vo.LiveRoomVO">
+        SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_desc roomDesc,
+                r.room_status roomStatus,r.live_start_date liveStartDate,u.user_true_name userTrueName,
+                de.position_name positionName
+			FROM   live_room  r 
+				   LEFT JOIN users  u ON r.lecturer_id=u.id
+				   LEFT JOIN user_detail de  ON u.id=de.user_id
+		    WHERE r.room_status IN(0,1) AND u.user_status=0
+		    ORDER BY r.id  DESC    
+    </select>
+    
+    <!--获取直播历史信息@author hejinguo -->
+    <select id="getLiveHistoryList"  resultType="com.project.meetinglive.vo.LiveRoomVO">
+        SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_desc roomDesc,r.play_number playNumber,
+                u.user_true_name userTrueName,de.position_name positionName
+				  FROM   live_room  r 
+				        LEFT JOIN users  u ON r.lecturer_id=u.id
+				        LEFT JOIN user_detail de  ON u.id=de.user_id
+				  WHERE r.room_status=2 AND r.publish_status=1 AND u.user_status=0
+				  ORDER BY r.live_end_date  DESC
+    </select>
+    
+    <!--根据ID查询直播详情信息@author  hejinguo -->
+    <select id="getLiveDetail" parameterType="java.lang.Integer"  resultType="com.project.meetinglive.vo.LiveDetailVO">
+        SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_desc roomDesc,
+                r.room_status roomStatus,r.play_able playAble,r.publish_status publishStatus,r.play_number playNumber,
+                r.live_start_date liveStartDate,r.live_end_date liveEndDate,
+                r.room_code roomCode,r.push_server_url pushServerUrl,r.push_secret_key pushSecretKey,
+                r.pull_rtmp_url pullRtmpUrl,r.pull_flv_url pullFlvUrl,r.pull_hls_url pullHlsUrl,r.pull_udp_url pullUdpUrl,r.video_mp4_url videoMp4Url,
+                u.user_true_name userTrueName,u.head_pic headPic,de.hospital_name hospitalName,de.position_name positionName,
+                de.desc userDesc
+			FROM   live_room  r 
+				   LEFT JOIN users  u ON r.lecturer_id=u.id
+				   LEFT JOIN user_detail de  ON u.id=de.user_id
+		    WHERE r.id=#{id} 
+    </select>
+    
+    <!-- 查询会议信息总记录数@author hejinguo -->
+    <select id="getLiveListCount" parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+         SELECT count(1) FROM  live_room  a
+    </select>
+    <!-- 获取会议列表信息@author  hejinguo -->
+    <select id="getLiveList" parameterType="java.util.HashMap" resultType="com.project.meetinglive.vo.LiveListVO">
+         SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_status roomStatus,r.publish_status publishStatus,r.play_number playNumber,
+                 r.live_start_date liveStartDate,r.push_server_url pushServerUrl,r.push_secret_key pushSecretKey,
+                 r.pull_rtmp_url pullRtmpUrl,r.pull_flv_url pullFlvUrl,r.pull_hls_url pullHlsUrl,r.pull_udp_url pullUdpUrl,r.video_mp4_url videoMp4Url
+			     FROM   live_room  r 
+				 order by r.id desc  limit #{startIndex},#{pageSize}
+    </select>
+    
+    <!-- 根据ID查询会议信息@author hejinguo -->
+    <select id="getLiveRoomById" parameterType="java.lang.Integer" resultType="com.project.meetinglive.modal.LiveRoomModel">
+          SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_qrCode_path roomQrCodePath,r.room_schedule_path roomSchedulePath,r.room_desc_path roomDescPath,
+                r.room_desc roomDesc,r.room_status roomStatus,r.play_able playAble,r.publish_status publishStatus,r.play_number playNumber,
+                r.live_start_date liveStartDate,r.live_end_date liveEndDate,
+                r.room_code roomCode,r.push_server_url pushServerUrl,r.push_secret_key pushSecretKey,
+                r.pull_rtmp_url pullRtmpUrl,r.pull_flv_url pullFlvUrl,r.pull_hls_url pullHlsUrl,r.pull_udp_url pullUdpUrl,r.video_mp4_url videoMp4Url
+			FROM   live_room  r 
+		    WHERE r.id=#{id} 
+    </select>
+    
+    <!-- 修改会议状态@author hejinguo -->
+    <update id="updateLiveStatus" parameterType="java.util.HashMap">
+        update  live_room  set 
+               <if test="roomStatus!=null and roomStatus!=''">
+				   room_status=#{roomStatus}
+			   </if> 
+			   <if test="publishStatus!=null and publishStatus!=''">
+				   publish_status=#{publishStatus}
+			   </if>
+			where id=#{id}   
+    </update>
+    
+    <!-- 修改会议信息@author hejinguo -->
+    <update id="updateLive" parameterType="com.project.meetinglive.modal.LiveRoomModel">
+       update live_room 
+               set   
+                room_title=#{roomTitle},room_pic_path=#{roomPicPath},room_qrCode_path=#{roomQrCodePath},
+                room_schedule_path=#{roomSchedulePath},room_desc_path=#{roomDescPath},video_mp4_url=#{videoMp4Url},
+                live_start_date=#{liveStartDate},updated_date=now()
+               where id=#{id} 
+    </update>
+    
+    <!-- 添加会议信息@author hejinguo -->
+    <insert id="addLive" parameterType="com.project.meetinglive.modal.LiveRoomModel" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[    
+           insert into live_room(room_title,room_pic_path,room_schedule_path,room_desc_path,live_start_date,created_date,created_name) 
+                  values (#{roomTitle},#{roomPicPath},#{roomSchedulePath},#{roomDescPath},#{liveStartDate},now(),#{createdName})      
+        ]]>
+    </insert>
+    
+    <!-- 更新会议直播地址信息@author hejinguo -->
+    <update id="updateLiveInfo" parameterType="com.project.meetinglive.modal.LiveRoomModel">
+         update live_room 
+                set   
+                room_qrCode_path=#{roomQrCodePath},room_code=#{roomCode},push_server_url=#{pushServerUrl},
+                push_secret_key=#{pushSecretKey},push_expire_date=#{pushExpireDate},pull_rtmp_url=#{pullRtmpUrl},
+                pull_flv_url=#{pullFlvUrl},pull_hls_url=#{pullHlsUrl},pull_udp_url=#{pullUdpUrl},video_mp4_url=#{videoMp4Url},
+                updated_date=now()
+           where id=#{id} 
+    </update>
+    
+    <!-- 查询会议信息总记录数(微信端)@author hejinguo -->
+    <select id="getWechatLiveListCount" parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+         SELECT count(1) FROM  live_room  r where r.publish_status!=2
+    </select>
+    <!-- 获取会议列表信息(微信端)@author  hejinguo -->
+    <select id="getWechatLiveList" parameterType="java.util.HashMap" resultType="com.project.meetinglive.vo.LiveListVO">
+         SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_status roomStatus,r.publish_status publishStatus,r.play_number playNumber,
+                 r.live_start_date liveStartDate,r.push_server_url pushServerUrl,r.push_secret_key pushSecretKey,
+                 r.pull_rtmp_url pullRtmpUrl,r.pull_flv_url pullFlvUrl,r.pull_hls_url pullHlsUrl,r.pull_udp_url pullUdpUrl,r.video_mp4_url videoMp4Url
+			     FROM   live_room  r  where r.publish_status!=2
+				 order by r.id desc  limit #{startIndex},#{pageSize}
+    </select>
+    
+    <!-- 根据roomCode获取直播信息@author hejingup -->
+    <select id="getLiveRoomByRoomCode"  parameterType="java.lang.String" resultType="com.project.meetinglive.modal.LiveRoomModel">
+        SELECT  r.id,r.room_title roomTitle,r.room_pic_path roomPicPath,r.room_qrCode_path roomQrCodePath,r.room_schedule_path roomSchedulePath,r.room_desc_path roomDescPath,
+                r.room_desc roomDesc,r.room_status roomStatus,r.play_able playAble,r.publish_status publishStatus,r.play_number playNumber,
+                r.live_start_date liveStartDate,r.live_end_date liveEndDate,
+                r.room_code roomCode,r.push_server_url pushServerUrl,r.push_secret_key pushSecretKey,
+                r.pull_rtmp_url pullRtmpUrl,r.pull_flv_url pullFlvUrl,r.pull_hls_url pullHlsUrl,r.pull_udp_url pullUdpUrl,r.video_mp4_url videoMp4Url
+			FROM   live_room  r 
+		    WHERE  r.room_code=#{roomCode} 
+    </select>
+    
+    <!-- 修改直播信息@author  hejinguo -->
+    <update id="updateLiveRoomInfo" parameterType="com.project.meetinglive.modal.LiveRoomModel">
+        update live_room set   
+                   room_status=#{roomStatus},updated_date=now()
+                   <if test="liveStartDate!=null">
+				   ,live_start_date=#{liveStartDate}
+			       </if>
+                   <if test="liveEndDate!=null">
+				   ,live_end_date=#{liveEndDate}
+			      </if>
+			      <if test="videoMp4Url!=null and videoMp4Url!=''">
+				   ,video_mp4_url=#{videoMp4Url}
+			      </if> 
+               where id=#{id} 
+    </update>
+    
+</mapper> 

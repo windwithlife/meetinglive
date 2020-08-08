@@ -1,5 +1,18 @@
 <view class="container">
+  <van-dialog id="van-dialog" />
+  
   <view class="page-body">
+    <view wx:if="{{isShowInfo_get}}" class="info_get_con">
+      <view class="info_get">
+        <view class="info_get_title">个人信息提交</view>
+        <view class="info_get_content_con" wx:for="{{ info_get_list }}">
+          <view class="info_get_content_con_l">{{item.leftDesc}}</view>
+          <input data-identify="{{item.identify}}" class="info_get_content_con_r" bindinput="inputDeal" wx:if="{{item.type == 'text'}}" type="text" value="{{item.rightVal}}"/>
+          <text  wx:if="{{item.identify == 'provice'}}" bindtap="changeProviceShow" class="info_get_content_con_r_province iconfont icon-moreinfo-copy">{{item.rightVal}}</text>
+        </view>
+        <view bindtap="doSubmit" class="info_get_submit">提交</view>
+      </view>
+    </view>
     <view class="page-section tc">
       <view class="mantle_con" wx-if="{{isShowMantle}}">
         <van-count-down   bind:finish="countDownFinished"
@@ -7,7 +20,7 @@
       </view>
 
       <video id="myVideo" binderror="videoErrorCallback" show-casting-button  show-screen-lock-button
-        src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" 
+        src="{{resultData.videoMp4Url}}" 
         show-center-play-btn='{{false}}'  show-play-btn="{{true}}"  controls
         picture-in-picture-mode="{{['push', 'pop']}}"
         bindenterpictureinpicture='bindVideoEnterPictureInPicture'
@@ -16,13 +29,13 @@
       ></video>
 
       <view class="main_desc_content_con">
-        <view class="main_desc_title">论新冠病毒对人体的影响</view>
+        <view class="main_desc_title">{{resultData.roomTitle}}</view>
         <view class="main_desc_con">
           <view class="main_desc_con_left icon-yonghutouxiang iconfont">
-            <text class="main_desc_con_text">张三</text>
+            <text class="main_desc_con_text">{{resultData.userTrueName}}</text>
           </view>
           <view class="main_desc_con_right icon-shipin iconfont">
-            <text class="main_desc_con_text">2000</text>
+            <text class="main_desc_con_text">{{resultData.playNumber}}</text>
           </view>
         </view>
       </view>
@@ -32,24 +45,24 @@
         <view class="teacther_intro_desc">讲师介绍</view>
         <view class="teacther_intro_title_con">
           <view class="teacther_intro_title_con_left">
-            <image class="img" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1129298362,2841049480&fm=26&gp=0.jpg"></image>
+            <image class="img" src="{{resultData.roomPicPath}}"></image>
           </view>
           <view class="teacther_intro_title_con_right">
-            <view>李四</view>
+            <view>{{resultData.userTrueName}}</view>
             <view>
-              <view>上海市中山医院心脏外科主任医师上海市十佳青年医生</view>
-              <view>对心脏病理学有深入研究上汽集团公告，表示终止收购神州租车股权</view>
+              <view>{{resultData.userDesc}}</view>
             </view>
           </view>
         </view>
       </view>
 
-
-
-
-  
     </view>
   </view>
 
  
+
+  <van-popup show="{{ titleIsShow }}" position="bottom" custom-style="height: 50%;" bind:close="changeProviceShow">
+    <van-picker confirm-button-text="确认" cancel-button-text="取消" title="职级" columns="{{ titleArray }}" 
+    bind:confirm="bindTitlePickerChange" show-toolbar="true" bind:cancel="changeProviceShow"/>
+  </van-popup>
 </view>

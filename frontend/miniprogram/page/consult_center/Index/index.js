@@ -17,11 +17,15 @@ Page({
         this.setData({
             informationList,
         })
-        invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getInformationList',{},(result)=>{
-          console.log('result: ', result);
-        },(errorMsg)=>{
-          console.log('errorMsg: ', errorMsg);
-        })
+        // invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getInformationList',{},(result)=>{
+        //   const {data} = result;
+        //   const {informationList} = data;
+        //   this.setData({
+        //     informationList,
+        // })
+        // },(errorMsg)=>{
+        //   console.log('errorMsg: ', errorMsg);
+        // })
       },
     tapBanner: function (e) {
         wx.navigateTo({ url: "page/consult_center/consult_detail/index",});

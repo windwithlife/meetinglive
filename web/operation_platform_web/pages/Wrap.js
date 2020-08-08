@@ -5,28 +5,30 @@ import "./styles/wrap.less"
 
 
 const menuList = [{
-    desc:"讲座设置",
+    desc:"会议设置",
     key:"lecture_setting", //匹配以 /lecture_setting开头的所有路由
-  },{
-    desc:"讲师设置",
-    key:"teacher_setting",
-  },{
-    desc:"广告设置",
-    key:"advertise_setting",
-  },{
-    desc:"咨询编辑",
-    key:"consult_edit",
-  }]
+  }
+  // ,{
+  //   desc:"讲师设置",
+  //   key:"teacher_setting",
+  // },{
+  //   desc:"广告设置",
+  //   key:"advertise_setting",
+  // },{
+  //   desc:"咨询编辑",
+  //   key:"consult_edit",
+  // }
+]
 
 function Head(props){
   return (
     <div className="head_con">
       <div className="head_con_left">
-        XX医疗运营后台
+      E健云运营后台
       </div>
       <div className="head_con_right">
-        <div>18621085656</div>
-        <div className="exit">退出</div>
+        {/* <div>18621085656</div> */}
+        {/* <div className="exit">退出</div> */}
       </div>
     </div>
   )

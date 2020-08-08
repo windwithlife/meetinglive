@@ -1,6 +1,11 @@
 .mine_con{
   
 }
+.line_con_right_pic{
+    width: 82rpx;
+    height: 82rpx;
+    border-radius: 50%;
+}
 .line_con{
     padding-left: 20rpx;
     padding-right: 20rpx;

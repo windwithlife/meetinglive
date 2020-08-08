@@ -1,65 +1,61 @@
-import {isLogin,getOpenId,exitLogin,invoke_post } from "../../common/tools";
+import {isLogin,exitLogin,invoke_post,getOpenId } from "../../common/tools";
+const app = getApp();
 Page({
   data: {
     pageBannerList: [],
     liveStartList:[],
-    liveHistoryList:[]
+    liveHistoryList:[],
+    isShowLogin:true,
+    userInfo:{}, //用户授权信息数据
+  },
+  bindgetuserinfo(res){
+    const {userInfo} = res.detail;
+    console.log('bindgetuserinfo---this.data.userInfo: ', this.data.userInfo);
+    this.setData({ userInfo })
+  },
+  getPhoneNumber(e){
+    const {errMsg,iv,encryptedData} = e.detail;
+    const {avatarUrl,country,province,city,gender,nickName} = this.data.userInfo;
+    getOpenId((openId)=>{
+      let params = {
+        userNickName:nickName,
+        headPic:avatarUrl,
+        userGrenderWx:gender,
+        userCountryWx:country,
+        userProvinceWx:province,
+        userCityWx:city,
+        encryptedData:encryptedData,
+        iv:iv,
+        openId:openId
+      }
+      invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerUser',params,(result)=>{
+        let {openId,token} = result;
+        const {WX_OPEN_ID,WX_TOKEN} = app.globalData;
+        wx.setStorageSync(WX_OPEN_ID, openId);
+        wx.setStorageSync(WX_TOKEN, token);
+      },(errorMsg)=>{
+        console.log('errorMsg: ', errorMsg);
+      })
+    })
+  },
+  doClick(event){
+    const {currentTarget} = event;
+    const {id} = currentTarget?.dataset;
+    wx.navigateTo({
+      url:`/page/Index/video/video?id=${id}`,
+    })
   },
   onLoad(objectQuery){
-    const data = {
-      pageBannerList:[{
-        id:123,
-        advTitle:"标题",
-        advPicPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg",
-        path:'/page/component/details/details'
-      }],
-      liveStartList:[{
-        id:123,
-        roomTitle:"roomTitle",
-        roomPicPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg",
-        roomDesc:"roomDesc",
-        userTrueName:"userTrueName",
-        positionName:"positionName",
-        roomStatus:0, //0:未开始 1:直播中 2:已结束
-        liveStartDate:"liveStartDate",
-      },{
-        id:123,
-        roomTitle:"roomTitle",
-        roomPicPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg",
-        roomDesc:"roomDesc",
-        userTrueName:"userTrueName",
-        positionName:"positionName",
-        roomStatus:1, //0:未开始 1:直播中 2:已结束
-        liveStartDate:"liveStartDate",
-      },{
-        id:123,
-        roomTitle:"roomTitle",
-        roomPicPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg",
-        roomDesc:"roomDesc",
-        userTrueName:"userTrueName",
-        positionName:"positionName",
-        roomStatus:2, //0:未开始 1:直播中 2:已结束
-        liveStartDate:"liveStartDate",
-      }],
-      liveHistoryList:[{
-        id:1234,
-        roomTitle:"标题",
-        roomPicPath:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3464775501,3653819025&fm=26&gp=0.jpg',
-        roomDesc:"直播内容",
-        userTrueName:"讲师姓名",
-        positionName:"职位名称",
-        playNumber:1234,
-      }]
-    }
-    const {pageBannerList,liveStartList,liveHistoryList} = data;
-    this.setData({
-      pageBannerList,liveStartList,liveHistoryList
+    isLogin((flag)=>{
+      //"isLogin":Integer 是否登录(0:未登录 1:已登录)
+      if(flag == 1) this.setData({isShowLogin:false});
+      else this.setData({isShowLogin:true});
     })
-
     invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getHomePage',{},(result)=>{
-      console.log('result: ', result);
+      const {pageBannerList,liveStartList,liveHistoryList} = result;
+      this.setData({ liveStartList })
     },(errorMsg)=>{
-      console.log('errorMsg: ', errorMsg);
+      console.error('errorMsg: ', errorMsg);
     })
   },
   tapBanner: function (e) {

@@ -1,5 +1,5 @@
 <block>
-    <navigator url="/page/consult_center/consult_detail/index" class="info_center_con" wx:for="{{informationList}}" wx:key="*this" >
+    <navigator url="/page/consult_center/consult_detail/index?id={{item.id}}" class="info_center_con" wx:for="{{informationList}}" wx:key="*this" >
         <view class="info_center_left">
             <view class="info_center_left_desc">{{item.advTitle}}</view>
             <view class="iconfont icon-yanjing">

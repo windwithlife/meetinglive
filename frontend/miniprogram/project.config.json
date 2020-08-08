@@ -90,9 +90,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 4,
 					"name": "直播视频页",
 					"pathName": "page/Index/video/video",
+					"query": "id=2",
 					"scene": null
 				}
 			]

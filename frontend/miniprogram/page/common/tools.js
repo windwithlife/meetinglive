@@ -1,49 +1,86 @@
-/**
- * @param {*} successCallback 
- * @param {*} failCallback 
- * 判断登录接口
- */
-export function isLogin(successCallback,failCallback){
-    invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateUserLogin',{},successCallback,failCallback);
-}
-/**
- * 退出登录接口
- * @param {*} successCallback 
- * @param {*} failCallback 
- */
-export function exitLogin(successCallback,failCallback){
-    invoke_post('https://service.koudaibook.com/meeting-server/api/userService/loginOut',{},successCallback,failCallback);
-    
-}
-/**
- * 获取openid接口
- * @param {*} successCallback 
- * @param {*} failCallback 
- */
-export function getOpenId(successCallback,failCallback){
-    wx.login({
-        success (res) {
-          if (res.code) {
-            const code = res.code;
-            invoke_post(
-                "https://service.koudaibook.com/meeting-server/api/wechatService/getWechatOpenId",
-                {code},
-                successCallback,failCallback
-            )
-          } else {
-            console.error('获取code失败' + res.errMsg)
-          }
-        }
-      })
+const app = getApp();
+const {WX_OPEN_ID,WX_TOKEN,WX_CODE_KEY} = app.globalData;
+import Dialog from "@vant/weapp/dialog/dialog.js"
+/**省市区查询 */
+export function getRegionList(successCallback,pid=100000,level=1){
+  invoke_post('https://service.koudaibook.com/meeting-server/api/userService/getRegionList',{pid,level},successCallback);
 }
 
-export function invoke_post(url='',params={},successCallback,failCallback){
-    wx.request({
+/** 判断登录接口*/
+export function isLogin(successCallback){
+    //"isLogin":Integer 是否登录(0:未登录 1:已登录)
+    invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateUserLogin',{},function(result){
+      const {isLogin} = result;
+      if(isLogin == 0) console.log('-------isLogin-------','用户未登录');
+      else if(isLogin == 1) console.log('-------isLogin-------','用户已登录');
+      successCallback(isLogin);
+    });
+}
+/**退出登录接口*/
+export function exitLogin(successCallback){
+    invoke_post('https://service.koudaibook.com/meeting-server/api/userService/loginOut',{},successCallback);
+}
+/**获取openid接口*/
+export function getOpenId(successCallback){
+    var wx_code = wx.getStorageSync(WX_CODE_KEY);
+    invoke_post(
+      "https://service.koudaibook.com/meeting-server/api/wechatService/getWechatOpenId",
+      {code:wx_code},
+      (result)=>{
+        let {openId} = result;
+        successCallback(openId)
+      }
+    );
+}
+
+const checkStatus = response => {
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    return response.data
+  } else {
+    Dialog.alert({ title: 'checkStatus_error', message:  response.errMsg || 'checkStatus_error'})
+    return {};
+  }
+}
+const jsLogin = (result) => {
+  let {token='',status,data,message} = result;//status 响应状态(0:失败 1:成功  2:未登录)
+  switch(status){
+      case 0 :  {
+        Dialog.alert({ title: 'jsLogin_status_0', message:message})
+      }
+      break;
+      case 1 : {
+        
+      }
+      break;
+      case 2 :{
+          
+      }
+      break;
+  }
+  return data;
+}
+
+export function invoke_post(url='',params={},successCallback){
+      var openId = wx.getStorageSync(WX_OPEN_ID);
+      var token = wx.getStorageSync(WX_TOKEN);
+      wx.request({
         url,
         method:"POST",
-        success:successCallback,
-        fail:failCallback,
+        success:function(response){
+          let result = checkStatus(response);
+          let data = jsLogin(result)
+          const {token,openId} = data;
+          console.log('invoke_post_response:>>>>>> ', data);
+          if(!!token) wx.setStorageSync(WX_TOKEN, token);
+          if(!!openId) wx.setStorageSync(WX_OPEN_ID, openId);
+          
+          successCallback(data);
+        },
+        fail:function(error){
+          Dialog.alert({ title: 'invoke_post_error', message: JSON.stringify(error)})
+        },
         data:{
+            openId,token,
             version:1,
             category:1,
             platType:3,
@@ -52,3 +89,4 @@ export function invoke_post(url='',params={},successCallback,failCallback){
         }
     })
 }
+

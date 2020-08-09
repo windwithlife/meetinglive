@@ -42,19 +42,19 @@ public class ValidateLoginHelp {
         }
         if (platType == 3) {//微信
             String token = jsonMessage.getToken();
-            String openId = jsonMessage.getOpenId();
+            //String openId = jsonMessage.getOpenId();
             if (StringUtils.isBlank(token)) {
                 resMessage.setStatus(ResponseMessage.NO_LOGIN);
                 resMessage.setMessage("您当前未登录!");
                 logger.error("请求参数TokenId不能为空!");
                 return resMessage;
             }
-            if (StringUtils.isBlank(openId)) {
-                resMessage.setStatus(ResponseMessage.NO_LOGIN);
-                resMessage.setMessage("您当前未登录!");
-                logger.error("请求参数TokenId不能为空!");
-                return resMessage;
-            }
+            //            if (StringUtils.isBlank(openId)) {
+            //                resMessage.setStatus(ResponseMessage.NO_LOGIN);
+            //                resMessage.setMessage("您当前未登录!");
+            //                logger.error("请求参数TokenId不能为空!");
+            //                return resMessage;
+            //            }
             //step2:根据token获取userId
             String tokenValue = JedisHelper.getInstance().get(token, JedisDBEnum.WECHAT);
             if (StringUtils.isBlank(tokenValue)) {

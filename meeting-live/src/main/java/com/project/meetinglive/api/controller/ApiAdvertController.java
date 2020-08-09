@@ -21,7 +21,6 @@ import com.project.meetinglive.core.data.message.ResponseMessage;
 import com.project.meetinglive.core.data.pageBean.SinglePageBean;
 import com.project.meetinglive.core.data.request.JsonMessage;
 import com.project.meetinglive.core.exception.CommonExceptionHandle;
-import com.project.meetinglive.core.spring.interceptor.annotation.LoginRequired;
 import com.project.meetinglive.modal.LiveRoomModel;
 import com.project.meetinglive.vo.AdvertVO;
 import com.project.meetinglive.vo.BannerVO;
@@ -139,7 +138,6 @@ public class ApiAdvertController {
      * @return
      */
     @PostMapping(value = { "/getLiveList" }, consumes = { "application/json" }, produces = { "application/json" })
-    @LoginRequired
     public @ResponseBody ResponseMessage getLiveList(@RequestBody JsonMessage jsonMessage,
                                                      HttpServletRequest request,
                                                      HttpServletResponse response) {

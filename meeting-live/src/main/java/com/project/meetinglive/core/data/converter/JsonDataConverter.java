@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.util.StreamUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.project.meetinglive.common.constant.DataEncode;
 import com.project.meetinglive.common.util.JsonUtil;
 import com.project.meetinglive.core.data.request.JsonMessage;
@@ -61,7 +62,16 @@ public class JsonDataConverter extends AbstractHttpMessageConverter<Object> {
                 out.flush();
                 return;
             }
-            String json = JSONObject.toJSONString(obj);//SerializerFeature.WriteMapNullValue
+            /**
+             * QuoteFieldNames———-输出key时是否使用双引号,默认为true
+             * WriteMapNullValue——–是否输出值为null的字段,默认为false
+             * WriteNullNumberAsZero—-数值字段如果为null,输出为0,而非null
+             * WriteNullListAsEmpty—–List字段如果为null,输出为[],而非null
+             * WriteNullStringAsEmpty—字符类型字段如果为null,输出为"",而非null
+             * WriteNullBooleanAsFalse–Boolean字段如果为null,输出为false,而非null
+             */
+            String json = JSONObject.toJSONString(obj, SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteNullListAsEmpty);
             logger.info("返回消息信息:" + json);
             out = outputMessage.getBody();
             out.write(json.getBytes(DataEncode.UTF8));

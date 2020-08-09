@@ -224,8 +224,8 @@ public class LiveService {
         }
         if (operationType == 2) {
             paramMap.put("roomStatus", 2);
-            //step3.1:调用腾讯api断开直播
-            LiveClientHelp.dropLiveStream(ApplicationConfig.tecentCloud_live_pushServerurl,
+            //step3.1:调用腾讯api禁推直播
+            LiveClientHelp.forbidLiveStream(ApplicationConfig.tecentCloud_live_pushServerurl,
                 ApplicationConfig.tecentCloud_live_appName, liveRoomModel.getRoomCode());
         }
         if (operationType == 3) {

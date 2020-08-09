@@ -10,6 +10,8 @@ import com.project.meetinglive.common.util.JsonUtil;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.live.v20180801.models.DropLiveStreamRequest;
 import com.tencentcloudapi.live.v20180801.models.DropLiveStreamResponse;
+import com.tencentcloudapi.live.v20180801.models.ForbidLiveStreamRequest;
+import com.tencentcloudapi.live.v20180801.models.ForbidLiveStreamResponse;
 
 /**
  * 直播流管理帮助类
@@ -41,6 +43,31 @@ public class LiveClientHelp {
             .DropLiveStream(req);
         } catch (TencentCloudSDKException e) {
             logger.error("断开直播流处理异常,异常信息:message--->{}", e.toString());
+        }
+        return resp;
+    }
+
+    /**
+     * 禁推直播流
+     * @param pushDoMainUrl
+     * @param appName
+     * @param roomCode
+     * @return
+     */
+    public static ForbidLiveStreamResponse forbidLiveStream(String pushDoMainUrl, String appName,
+                                                            String roomCode) {
+        ForbidLiveStreamResponse resp = null;
+        try {
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("DomainName", pushDoMainUrl);
+            paramMap.put("AppName", appName);
+            paramMap.put("StreamName", roomCode);
+            String params = JsonUtil.writeObjectJSON(paramMap);
+            ForbidLiveStreamRequest req = ForbidLiveStreamRequest.fromJsonString(params,
+                ForbidLiveStreamRequest.class);
+            resp = TecentCloudFactory.create().getLiveClient().ForbidLiveStream(req);
+        } catch (TencentCloudSDKException e) {
+            logger.error("禁推直播流处理异常,异常信息:message--->{}", e.toString());
         }
         return resp;
     }

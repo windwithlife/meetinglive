@@ -14,7 +14,7 @@
     "navigationBarTitleText": "会议平台",
     "navigationBarBackgroundColor": "#AB956D",
     "backgroundColor": "#eeeeee",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": false
   },
   "tabBar": {
     "color": "#b7b7b7",

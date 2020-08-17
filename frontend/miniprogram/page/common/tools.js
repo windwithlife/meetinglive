@@ -1,6 +1,17 @@
 const app = getApp();
-const {WX_OPEN_ID,WX_TOKEN,WX_CODE_KEY} = app.globalData;
+import {WX_OPEN_ID,WX_TOKEN,WX_CODE_KEY}  from "./const"
 import Dialog from "@vant/weapp/dialog/dialog.js"
+
+/**微信登录 */
+export function doLogin(){
+  wx.login({
+    success (res) {
+      const {code = ''} =  res;
+      wx.setStorageSync(WX_CODE_KEY, code);
+    }
+  })
+}
+
 /**省市区查询 */
 export function getRegionList(successCallback,pid=100000,level=1){
   invoke_post('https://service.koudaibook.com/meeting-server/api/userService/getRegionList',{pid,level},successCallback);
@@ -33,6 +44,7 @@ export function getOpenId(successCallback){
     );
 }
 
+
 const checkStatus = response => {
   if (response.statusCode >= 200 && response.statusCode < 300) {
     return response.data
@@ -45,6 +57,9 @@ const jsLogin = (result) => {
   let {token='',status,data,message} = result;//status 响应状态(0:失败 1:成功  2:未登录)
   switch(status){
       case 0 :  {
+        if(message.includes('请重新打开')){ //重新获取wx_code
+          doLogin();
+        }
         Dialog.alert({ title: 'jsLogin_status_0', message:message})
       }
       break;
@@ -53,7 +68,8 @@ const jsLogin = (result) => {
       }
       break;
       case 2 :{
-          
+        doLogin();
+        wx.switchTab({url:'/page/Index/square/index'})
       }
       break;
   }

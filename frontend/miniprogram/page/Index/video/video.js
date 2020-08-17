@@ -1,13 +1,13 @@
 const app = getApp()
 import {isLogin,exitLogin,invoke_post,getOpenId,getRegionList } from "../../common/tools";
 
-
 Page({
   data: {
     countTime:0,
     isShowMantle:false,
     resultData:{},
     regionList:[],
+    pageQuery:{},
 
     isShowInfo_get:false, //是否显示信息录取弹窗
     titleArray:[], //省份数据
@@ -21,7 +21,7 @@ Page({
       type:"select",
       identify:"provice",
       leftDesc:"省份",
-      rightVal:"请选择",
+      rightVal:"",
     },{
       type:"text",
       identify:"hospital",
@@ -49,6 +49,7 @@ Page({
     this.setData({ titleIsShow:!this.data.titleIsShow });
   },
   doSubmit(){
+    console.log('this.data.info_get_list: ', this.data.info_get_list);
     if(!this.data.info_get_list.every((item)=>!!item.rightVal && item.rightVal != '请选择')) return;
     let params = {}
     this.data.info_get_list.forEach((item,idx) => {
@@ -99,18 +100,19 @@ Page({
       let {regionList} = result;
       let arr = [];
       regionList.forEach((item)=>{arr.push(item.name)})
-      console.log('arr: ', arr);
       this.setData({regionList,titleArray:arr})
     })
   },
   onLoad(objectQuery){
-    const {id=""} = objectQuery;
+    this.setData({pageQuery:objectQuery})
+  },
+  onShow(){
+    const {id=""} = this.data.pageQuery;
     this.validateWriteUserInfo();
     this.getRegionList();
     invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getLiveDetail',{
       id
     },(resultData)=>{
-      console.log('result:0000000 ', resultData);
       this.setData({ resultData})
       this.dealCountDown(resultData);
     },(errorMsg)=>{

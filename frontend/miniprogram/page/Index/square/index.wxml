@@ -1,9 +1,14 @@
-<block>
+<view class="square_con">
     <van-dialog id="van-dialog" />
-    <view wx:if="{{isShowLogin}}">
-        <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">登录</button>
-        <button open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">信息授权</button>
+    <view  wx:if="{{loginToastFlag}}"  class="login_con">
+        <view class="login_con_2">
+            <view class="login_con_2_title_1">您还未登录</view>
+            <view class="login_con_2_title_2">请登录后再进行操作</view>
+            <button class="btn" bindtap="notLogin">暂不登录</button>
+            <button class="btn" open-type="getPhoneNumber"  bindgetphonenumber="getPhoneNumber">立即登录</button>
+        </view>
     </view>
+    <button  wx:if="{{isShowLogin}}" class="auth_login_btn"  open-type="getUserInfo"  bindgetuserinfo="bindgetuserinfo">登录</button>
     <!-- <swiper indicator-dots="true" autoplay="true" interval="3000" duration="800" circular="true">
         <block class="slide_image_con" wx:for="{{pageBannerList}}" wx:key="*this">
             <swiper-item>
@@ -28,13 +33,13 @@
         </scroll-view>
     </view> -->
 
-    <view wx:if="{{!!liveStartList.length}}" class="playback_con">
+    <view wx:if="{{!!liveList.length}}" class="playback_con">
         <!-- <view class="playback_head_con">
             <text>精彩回放</text>
             <text class="icon-moreinfo-copy iconfont">更多</text>
         </view> -->
         <view class="playback_contnet_con">
-            <view  bindtap="doClick" data-id="{{item.id}}" class="playback_item_con"  wx:for="{{liveStartList}}" wx:key="*this">
+            <view  bindtap="doClick" data-id="{{item.id}}" class="playback_item_con"  wx:for="{{liveList}}" wx:key="*this">
                 <view class="playback_item_left">
                     <image mode="scaleToFill" class="slide_image" src="{{item.roomPicPath}}" />
                     <text wx:if="{{item.roomStatus == 0}}" class="playback_item_left_text">{{item.liveStartDate}}直播</text>
@@ -44,8 +49,7 @@
                 <view class="playback_item_right">
                     <view class="playback_item_right_one_line">{{item.roomTitle}}</view>
                     <view class="iconfont playback_item_right_two_line">
-                        <!-- <view class="playback_item_right_user playback_item_right_three_line">{{item.userTrueName}} {{item.positionName}}</view> -->
-                        <view wx:if="{{!!item.playNumber}}" class="icon-shipin iconfont">
+                        <view wx:if="{{!!item.playNumber || item.playNumber == 0}}" class="icon-shipin iconfont">
                             <view class="playback_item_right_user_2">{{item.playNumber}}</view>
                         </view>
                     </view>
@@ -53,4 +57,4 @@
             </view>
         </view>
     </view>
-</block>
+</view>

@@ -30,7 +30,7 @@ export default class Login extends React.Component{
     render(){
         return (
             <div className="con">  
-                <h1>
+                <h1 style={{color:"#000"}}>
                     E健云运营后台
                 </h1>
                 <Form  {...layout} name="basic" initialValues={{ remember: true, }} 

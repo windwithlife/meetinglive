@@ -1,20 +1,28 @@
 import {isLogin,exitLogin,invoke_post,getOpenId } from "../../common/tools";
-const app = getApp();
+import Dialog from "@vant/weapp/dialog/dialog.js"
+import {WX_OPEN_ID,WX_TOKEN} from "../../common/const";
+let currentPage = 1;
 Page({
   data: {
     pageBannerList: [],
-    liveStartList:[],
+    liveList:[],
     liveHistoryList:[],
-    isShowLogin:true,
+    isShowLogin:false,
+    loginToastFlag:false,
     userInfo:{}, //用户授权信息数据
   },
+  notLogin(){
+    this.setData({loginToastFlag:false})
+  },
   bindgetuserinfo(res){
-    const {userInfo} = res.detail;
-    console.log('bindgetuserinfo---this.data.userInfo: ', this.data.userInfo);
-    this.setData({ userInfo })
+    const userInfo =  res?.detail?.userInfo || '';
+    console.log('userInfo: ', !!userInfo);
+    if(!!userInfo) this.setData({ userInfo,loginToastFlag:true })
+    else  Dialog.alert({ title: 'bindgetuserinfo', message:'用户信息获取失败，请重试'})
   },
   getPhoneNumber(e){
     const {errMsg,iv,encryptedData} = e.detail;
+    if(!iv || !encryptedData) return;
     const {avatarUrl,country,province,city,gender,nickName} = this.data.userInfo;
     getOpenId((openId)=>{
       let params = {
@@ -30,9 +38,11 @@ Page({
       }
       invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerUser',params,(result)=>{
         let {openId,token} = result;
-        const {WX_OPEN_ID,WX_TOKEN} = app.globalData;
-        wx.setStorageSync(WX_OPEN_ID, openId);
-        wx.setStorageSync(WX_TOKEN, token);
+        if(!!openId && !!token){
+          wx.setStorageSync(WX_OPEN_ID, openId);
+          wx.setStorageSync(WX_TOKEN, token);
+          this.setData({isShowLogin:false,loginToastFlag:false})
+        }
       },(errorMsg)=>{
         console.log('errorMsg: ', errorMsg);
       })
@@ -45,18 +55,26 @@ Page({
       url:`/page/Index/video/video?id=${id}`,
     })
   },
-  onLoad(objectQuery){
+  init(){
+    invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getLiveList',{
+      currentPage,pageSize:10,
+    },(result)=>{
+      let {liveList,totalPage} = result;
+      liveList = this.data.liveList.concat(liveList);
+      currentPage++;
+      this.setData({ liveList:liveList });
+      if(currentPage <= totalPage) this.init();
+    },(errorMsg)=>{
+      console.error('errorMsg: ', errorMsg);
+    })
+  },
+  onShow(objectQuery){
     isLogin((flag)=>{
       //"isLogin":Integer 是否登录(0:未登录 1:已登录)
       if(flag == 1) this.setData({isShowLogin:false});
       else this.setData({isShowLogin:true});
     })
-    invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getHomePage',{},(result)=>{
-      const {pageBannerList,liveStartList,liveHistoryList} = result;
-      this.setData({ liveStartList })
-    },(errorMsg)=>{
-      console.error('errorMsg: ', errorMsg);
-    })
+    this.init();
   },
   tapBanner: function (e) {
     var path = this.data.imgUrls[e.target.dataset.id].path;

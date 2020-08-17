@@ -1,14 +1,5 @@
-const WX_CODE_KEY = 'wx_code';
-const WX_OPEN_ID = "wx_openid";
-const WX_TOKEN = "wx_token";
-function doLogin(){
-  wx.login({
-    success (res) {
-      const {code = ''} =  res;
-      wx.setStorageSync(WX_CODE_KEY, code);
-    }
-  })
-}
+import {WX_CODE_KEY,WX_OPEN_ID,WX_TOKEN} from "./page/common/const";
+import {doLogin} from "./page/common/tools";
 App({
   onShow: function () {
     /**生命周期回调——监听小程序启动或切前台。*/
@@ -29,6 +20,5 @@ App({
     })
   },
   globalData: {
-    WX_CODE_KEY,WX_OPEN_ID,WX_TOKEN
   }
 })

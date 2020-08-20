@@ -5,7 +5,7 @@ const withPlugins = require('next-compose-plugins');
 const logger = require("./tool_server/logger")(__filename);
 const path = require('path');
 
-const stylePlugins = [  
+const stylePlugins = [
   [ 
     withCSS,
     {
@@ -37,9 +37,29 @@ const stylePlugins = [
   ]
 ]
 const config = {
-  webpack: (config, options) => {
-    logger.info('options: ',JSON.stringify(options));
-    return config;
+  webpack: (config, { isServer }) => {
+    console.log('config: ', JSON.stringify(config));
+    if (isServer) {
+      const antStyles = /antd-mobile\/.*?\/style.*?/
+      const origExternals = [...config.externals]
+      config.externals = [
+        (context, request, callback) => {
+          if (request.match(antStyles)) return callback()
+
+          if (typeof origExternals[0] === 'function') {
+            origExternals[0](context, request, callback)
+          } else {
+            callback()
+          }
+        },
+        ...(typeof origExternals[0] === 'function' ? [] : origExternals),
+      ]
+      config.module.rules.unshift({
+        test: antStyles,
+        use: 'null-loader',
+      })
+    }
+    return config
   },
 }
 

@@ -38,7 +38,7 @@ const stylePlugins = [
 ]
 const config = {
   webpack: (config, { isServer }) => {
-    console.log('config: ', JSON.stringify(config));
+    // console.log('config: ', JSON.stringify(config));
     if (isServer) {
       const antStyles = /antd-mobile\/.*?\/style.*?/
       const origExternals = [...config.externals]

@@ -28,6 +28,7 @@
     "qrcode.react": "^1.0.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-lines-ellipsis": "^0.14.1",
     "xgplayer": "^2.9.14"
   },
   "license": "ISC",

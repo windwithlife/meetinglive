@@ -64,6 +64,7 @@ public class UsersService {
         String encryptedData = jsonMessage.getString("encryptedData");
         String iv = jsonMessage.getString("iv");
         String openId = jsonMessage.getString("openId");
+        String unionId = jsonMessage.getString("unionId");
         String fromUserIdentity = jsonMessage.getString("fromUserIdentity");
         logger.error("fromUserIdentity--->{}",fromUserIdentity);
         UsersModel.validateRegistUserParam(userNickName, headPic, userGrenderWx, encryptedData, iv,
@@ -126,7 +127,7 @@ public class UsersService {
             //step4:创建用户资料信息
             String userToken = TokenProccessor.getInstance().makeToken();//用户token
             UsersModel user = UsersModel.createUsersModel(userNickName, userMobile, headPic,
-                userToken, openId);
+                userToken,unionId, openId);
             this.usersDao.insertUsers(user);
             //step5:创建用户明细
             UserDetailModel userDetail = UserDetailModel.createUserDetailModel(user.getUserId(),

@@ -20,6 +20,16 @@ public class ApplicationConfig {
     public static String wecaht_meetinglive_meetinglive_accesstoken;
     /**获取小程序码*/
     public static String wecaht_meetinglive_getwxacodeunlimit;
+    /**健云公众号AppId*/
+    public static String publicAppId;
+    /**健云公众号秘钥*/
+    public static String publicSecret;
+    /**公众号用户授权获取*/
+    public static String userAauth2;
+    /**公众号授权获取AccessToken*/
+    public static String oauthAccessToken;
+    /**公众号获取用户信息*/
+    public static String oauthUserInfo;
 
     /**图片访问地址*/
     public static String upload_image_httpUrl;
@@ -31,7 +41,7 @@ public class ApplicationConfig {
     public static String upload_file_dirPath;
     /**文件访问目录*/
     public static String upload_file_path;
-    
+
     /**腾讯云推流域名*/
     public static String tecentCloud_live_pushServerurl;
     /**腾讯云拉流域名*/
@@ -72,6 +82,31 @@ public class ApplicationConfig {
     @Value("${wechat.xcx.meetinglive.getwxacodeunlimit}")
     public void setWecaht_meetinglive_getwxacodeunlimit(String wecaht_meetinglive_getwxacodeunlimit) {
         ApplicationConfig.wecaht_meetinglive_getwxacodeunlimit = wecaht_meetinglive_getwxacodeunlimit;
+    }
+    
+    @Value("${wechat.public.publicAppId}")
+    public  void setPublicAppId(String publicAppId) {
+        ApplicationConfig.publicAppId = publicAppId;
+    }
+
+    @Value("${wechat.public.publicSecret}")
+    public  void setPublicSecret(String publicSecret) {
+        ApplicationConfig.publicSecret = publicSecret;
+    }
+
+    @Value("${wechat.public.userAauth2}")
+    public  void setUserAauth2(String userAauth2) {
+        ApplicationConfig.userAauth2 = userAauth2;
+    }
+
+    @Value("${wechat.public.oauthAccessToken}")
+    public  void setOauthAccessToken(String oauthAccessToken) {
+        ApplicationConfig.oauthAccessToken = oauthAccessToken;
+    }
+
+    @Value("${wechat.public.oauthUserInfo}")
+    public  void setOauthUserInfo(String oauthUserInfo) {
+        ApplicationConfig.oauthUserInfo = oauthUserInfo;
     }
 
     @Value("${upload.image.httpUrl}")

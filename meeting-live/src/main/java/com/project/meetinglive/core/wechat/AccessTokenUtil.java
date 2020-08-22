@@ -18,8 +18,8 @@ import com.project.meetinglive.core.redis.JedisHelper;
  * @version $Id: AccessTokenUtil.java, v 0.1 2019年11月21日 下午10:57:56
  */
 public class AccessTokenUtil {
-    private static final Logger logger                      = LoggerFactory
-                                                                .getLogger(AccessTokenUtil.class);
+    private static final Logger logger                             = LoggerFactory
+        .getLogger(AccessTokenUtil.class);
     /**云健康微信accessToken  redis   key*/
     private static final String REDIS_KEY_MEETINGLIVE_ACCESS_TOKEN = "MEETING-LIVE-WECHAT-ACCESS-TOKEN";
 
@@ -28,9 +28,8 @@ public class AccessTokenUtil {
      * @return
      */
     public static String getWechatAccessToken() {
-        boolean existAccessToken = JedisHelper.getInstance().exists(
-            REDIS_KEY_MEETINGLIVE_ACCESS_TOKEN,
-            JedisDBEnum.WECHAT);
+        boolean existAccessToken = JedisHelper.getInstance()
+            .exists(REDIS_KEY_MEETINGLIVE_ACCESS_TOKEN, JedisDBEnum.WECHAT);
         if (existAccessToken) {
             String accessToken = JedisHelper.getInstance().get(REDIS_KEY_MEETINGLIVE_ACCESS_TOKEN,
                 JedisDBEnum.WECHAT);
@@ -38,9 +37,8 @@ public class AccessTokenUtil {
         } else {
             //请求地址
             String requestUrl = ApplicationConfig.wecaht_meetinglive_meetinglive_accesstoken
-                .replace(
-"APPID", ApplicationConfig.wecaht_meetinglive_appid).replace("APPSECRET",
-                    ApplicationConfig.wecaht_meetinglive_appsecret);
+                .replace("APPID", ApplicationConfig.wecaht_meetinglive_appid)
+                .replace("APPSECRET", ApplicationConfig.wecaht_meetinglive_appsecret);
             //step2:请求并返回信息
             String result = HttpClientHelp.getInstance().submit(requestUrl, HttpMethodEnum.GET,
                 HttpContentTypeEnum.FORM, null);

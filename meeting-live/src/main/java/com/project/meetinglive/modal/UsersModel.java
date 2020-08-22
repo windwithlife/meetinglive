@@ -16,14 +16,14 @@ import com.project.meetinglive.vo.UserInfoVo;
  * @version $Id: UsersModel.java, v 0.1 2020年7月13日 下午3:15:20
  */
 public class UsersModel implements Serializable {
-    private static final Logger logger                = LoggerFactory.getLogger(UsersModel.class);
+    private static final Logger logger              = LoggerFactory.getLogger(UsersModel.class);
     /**  */
     private static final long   serialVersionUID    = -3299069399674355478L;
 
     /**用户状态(0:可用)*/
-    public static final Byte    USER_STATUS_USABLE    = 0;
+    public static final Byte    USER_STATUS_USABLE  = 0;
     /**用户状态(1:禁用)*/
-    public static final Byte    USER_STATUS_DISABLE   = 1;
+    public static final Byte    USER_STATUS_DISABLE = 1;
 
     /**用户ID*/
     private Integer             userId;
@@ -41,6 +41,10 @@ public class UsersModel implements Serializable {
     private String              headPic;
     /**小程序openID*/
     private String              wechatOpenId;
+    /**公众号openId*/
+    private String              wechatPublicOpenId;
+    /**微信unionid*/
+    private String              unionId;
     /**用户token*/
     private String              userToken;
     /**用户类型(0:用户 1:讲师 2:管理员)*/
@@ -144,6 +148,20 @@ public class UsersModel implements Serializable {
     }
 
     /**
+     * 微信公众号授权登录或注册参数验证
+     * @param jsonMessage
+     * @throws Exception
+     */
+    public static void validateRegisterWechatPublicUserParam(String code,
+                                                             String openId) throws Exception {
+        if (StringUtils.isBlank(code) && StringUtils.isBlank(openId)) {
+            logger.error("微信公众号授权登录或注册时openId和code不能全为空,参数信息：openId--->{},code--->{}", openId,
+                code);
+            throw new ServiceException("请求参数错误,请重新授权登录!");
+        }
+    }
+
+    /**
      * 封装新用户信息
      * @param userNickName 用户昵称
      * @param userMobile 手机号
@@ -153,7 +171,7 @@ public class UsersModel implements Serializable {
      * @return
      */
     public static UsersModel createUsersModel(String userNickName, String userMobile,
-                                              String headPic, String token, String openId) {
+                                              String headPic, String token,String unionId, String openId) {
         UsersModel user = new UsersModel();
         user.setUserNickName(userNickName);
         user.setLoginName(userMobile);
@@ -161,6 +179,7 @@ public class UsersModel implements Serializable {
         user.setHeadPic(headPic);
         user.setWechatOpenId(openId);
         user.setUserToken(token);
+        user.setUnionId(unionId);
         user.setUserStatus(UsersModel.USER_STATUS_USABLE);
         user.setCreatedName(userMobile);
         return user;
@@ -294,4 +313,20 @@ public class UsersModel implements Serializable {
         this.passWord = passWord;
     }
 
+    public String getWechatPublicOpenId() {
+        return wechatPublicOpenId;
+    }
+
+    public void setWechatPublicOpenId(String wechatPublicOpenId) {
+        this.wechatPublicOpenId = wechatPublicOpenId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+  
 }

@@ -13,7 +13,9 @@
         <result column="user_mobile" property="userMobile" jdbcType="VARCHAR" />
         <result column="head_pic" property="headPic" jdbcType="VARCHAR" />
         <result column="wechat_openId" property="wechatOpenId" jdbcType="VARCHAR" />
+        <result column="wechat_public_openId" property="wechatPublicOpenId" jdbcType="VARCHAR" />
         <result column="user_token" property="userToken" jdbcType="VARCHAR" />
+        <result column="unionid" property="unionId" jdbcType="VARCHAR" />
         <result column="user_status" property="userStatus" jdbcType="INTEGER" />
         <result column="user_type" property="userType" jdbcType="INTEGER" />
         <result column="version" property="version" jdbcType="INTEGER" />
@@ -26,7 +28,7 @@
 	<!-- 根据手机号查询用户信息@author hejinguo -->
     <select id="selectUserByUserMobile" parameterType="java.lang.String" resultType="com.project.meetinglive.modal.UsersModel">
        select  u.id userId,u.user_nick_name userNickName,u.login_name loginName,u.user_mobile userMobil,
-               u.head_pic headPic,u.wechat_openId wechatOpenId,u.user_token userToken,
+               u.head_pic headPic,u.wechat_openId wechatOpenId,u.wechat_public_openId wechatPublicOpenId,u.unionid unionId,u.user_token userToken,
                u.user_status userStatus,u.version
            from  users u  where u.user_mobile=#{userMobile}
     </select>
@@ -34,8 +36,8 @@
     <!-- 新增用户信息@author hejinguo-->
     <insert id="insertUsers"  parameterType="UsersModel" useGeneratedKeys="true" keyProperty="userId">
         <![CDATA[    
-           insert into users(user_nick_name,login_name,user_mobile,head_pic,wechat_openId,user_token,user_status,created_date,created_name) 
-                  values (#{userNickName},#{loginName},#{userMobile},#{headPic},#{wechatOpenId},#{userToken},#{userStatus},now(),#{createdName})      
+           insert into users(user_nick_name,login_name,user_mobile,head_pic,wechat_openId,wechat_public_openId,unionid,user_token,user_status,created_date,created_name) 
+                  values (#{userNickName},#{loginName},#{userMobile},#{headPic},#{wechatOpenId},#{wechatPublicOpenId},#{unionId},#{userToken},#{userStatus},now(),#{createdName})      
         ]]>
     </insert>
     
@@ -105,6 +107,20 @@
     <!-- 根据PID查询地区信息@author hejinguo -->
     <select id="getRegionList" parameterType="java.util.HashMap" resultType="com.project.meetinglive.modal.RegionModel">
        select  r.id,r.name  from  sys_region  r  where r.pid=#{pid} and r.level=#{level}
+    </select>
+    
+    <!-- 根据unionId或openid查询公众号用户信息 -->
+    <select id="selectUserByunionIdOrOpenId" parameterType="java.util.HashMap" resultType="com.project.meetinglive.modal.UsersModel">
+        select  u.id userId,u.user_nick_name userNickName,u.login_name loginName,u.user_mobile userMobil,
+               u.head_pic headPic,u.unionid  unionId,u.wechat_openId wechatOpenId,u.wechat_public_openId wechatPublicOpenId,u.user_token userToken,
+               u.user_status userStatus,u.version
+           from  users u  where 
+            <if test="unionId!=null and unionId!=''">
+				   u.unionid=#{unionId}
+			</if> 
+			 <if test="openId!=null and openId!=''">
+				   u.wechat_public_openId=#{openId}
+			</if> 
     </select>
     
 </mapper> 

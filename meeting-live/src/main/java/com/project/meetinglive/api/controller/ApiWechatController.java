@@ -20,6 +20,7 @@ import com.project.meetinglive.api.service.ApiWechatService;
 import com.project.meetinglive.core.data.message.ResponseMessage;
 import com.project.meetinglive.core.data.request.JsonMessage;
 import com.project.meetinglive.core.exception.CommonExceptionHandle;
+import com.project.meetinglive.core.wechat.AdvancedUtil;
 
 /**
  * 微信管理控制层
@@ -86,6 +87,58 @@ public class ApiWechatController {
             resMessage.addKey$Value("token", resultMap.get("token"));
             resMessage.addKey$Value("isNewUser", resultMap.get("isNewUser"));
             resMessage.addKey$Value("newUserMessage", resultMap.get("newUserMessage"));
+            resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
+            resMessage.setMessage(ResponseMessage.SUCCESS_MESSAGE);
+        } catch (Exception e) {
+            CommonExceptionHandle.handleException(resMessage, jsonMessage, request, e);
+        }
+        return resMessage;
+    }
+    
+    /**
+     * 获取微信用户授权url
+     * @param jsonMessage
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping(value = { "/getWechatPublicOauthUrl" }, consumes = { "application/json" }, produces = { "application/json" })
+    public @ResponseBody ResponseMessage getWechatOauthUrl(@RequestBody JsonMessage jsonMessage,
+                                                      HttpServletRequest request,
+                                                      HttpServletResponse response) {
+        ResponseMessage resMessage = new ResponseMessage(jsonMessage);
+        //step  1:获取请求参数
+        String href = jsonMessage.getString("href");
+        if (StringUtils.isBlank(href)) {
+            resMessage.setMessage("请求参数href不能为空!");
+            return resMessage;
+        }
+        //step  2:获取微信授权请求url地址
+        String url = AdvancedUtil.getOauth2AccessTokenUrl("snsapi_userinfo", href);
+        resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
+        resMessage.addKey$Value("oauthUrl", url);
+        return resMessage;
+    }
+    
+    /**
+     * 微信公众号授权登录或注册
+     * @param jsonMessage
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping(value = { "/registerWechatPublicUser" }, consumes = { "application/json" }, produces = { "application/json" })
+    public @ResponseBody ResponseMessage registerWechatPublicUser(@RequestBody JsonMessage jsonMessage,
+                                                      HttpServletRequest request,
+                                                      HttpServletResponse response) {
+        //返回对象
+        ResponseMessage resMessage = new ResponseMessage(jsonMessage);
+        try {
+            //step1:用户注册或登录
+            Map<String, Object> resultMap = this.apiUsersService.registerWechatPublicUser(jsonMessage);
+            //step3:返回结果
+            resMessage.addKey$Value("openId", resultMap.get("openId"));
+            resMessage.addKey$Value("token", resultMap.get("token"));
             resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
             resMessage.setMessage(ResponseMessage.SUCCESS_MESSAGE);
         } catch (Exception e) {

@@ -102,4 +102,11 @@ public interface UsersDao {
      * @return
      */
     List<RegionModel> getRegionList(Map<String, Object> paramMap);
+    
+    /**
+     * 根据unionId或openid查询公众号用户信息
+     * @param userMobile
+     * @return
+     */
+    UsersModel selectUserByunionIdOrOpenId(Map<String, String> paramMap);
 }

@@ -24,6 +24,10 @@ public class UserInfoVo implements Serializable {
     private String            headPic;
     /**小程序openID*/
     private String            wechatOpenId;
+    /**公众号openId*/
+    private String            wechatPublicOpenId;
+    /**微信unionid*/
+    private String            unionId;
     /**用户token*/
     private String            userToken;
     /**用户类型(0:用户 1:讲师 2:管理员)*/
@@ -212,4 +216,20 @@ public class UserInfoVo implements Serializable {
         this.departmentName = departmentName;
     }
 
+    public String getWechatPublicOpenId() {
+        return wechatPublicOpenId;
+    }
+
+    public void setWechatPublicOpenId(String wechatPublicOpenId) {
+        this.wechatPublicOpenId = wechatPublicOpenId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+   
 }

@@ -106,13 +106,15 @@ public class ApiUsersController {
             //step3:返回结果
             resMessage.addKey$Value("id", userInfoVo.getId());
             resMessage.addKey$Value("userTrueName", userInfoVo.getUserTrueName());
+            resMessage.addKey$Value("userNickName", userInfoVo.getUserNickName());
             resMessage.addKey$Value("headPic", userInfoVo.getHeadPic());
+            resMessage.addKey$Value("userGrenderWx", userInfoVo.getUserGrenderWx());
             resMessage.addKey$Value("provinceId", userInfoVo.getProvinceId());
             resMessage.addKey$Value("provinceName", userInfoVo.getProvinceName());
             resMessage.addKey$Value("cityId", userInfoVo.getCityId());
             resMessage.addKey$Value("cityName", userInfoVo.getCityName());
             resMessage.addKey$Value("hospitalName", userInfoVo.getHospitalName());
-            resMessage.addKey$Value("departmentName", userInfoVo.getPositionName());
+            resMessage.addKey$Value("departmentName", userInfoVo.getDepartmentName());
             resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
             resMessage.setMessage(ResponseMessage.SUCCESS_MESSAGE);
         } catch (Exception e) {
@@ -197,6 +199,36 @@ public class ApiUsersController {
             resMessage.addBean("regionList", regionList);
             resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
             resMessage.setMessage(ResponseMessage.SUCCESS_MESSAGE);
+        } catch (Exception e) {
+            CommonExceptionHandle.handleException(resMessage, jsonMessage, request, e);
+        }
+        return resMessage;
+    }
+    
+    /**
+     * 公众号验证当前用户是否登录
+     * @param jsonMessage
+     * @return
+     */
+    @PostMapping(value = { "/validateWechatPublicUserLogin" }, consumes = { "application/json" }, produces = { "application/json" })
+    public @ResponseBody ResponseMessage validateWechatPublicUserLogin(HttpServletRequest request,
+                                             HttpServletResponse response,
+                                             @RequestBody JsonMessage jsonMessage) {
+        //返回对象
+        ResponseMessage resMessage = new ResponseMessage(jsonMessage);
+        try {
+            ResponseMessage responseMessage = ValidateLoginHelp.validateUserLogin(jsonMessage);
+            if (responseMessage.getStatus() == ResponseMessage.SUCCESS_CODE) {
+                resMessage.addKey$Value("isLogin", 1);
+                resMessage.setMessage(responseMessage.getMessage());
+                resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
+                return resMessage;
+            } else {
+                resMessage.addKey$Value("isLogin", 0);
+                resMessage.setMessage(responseMessage.getMessage());
+                resMessage.setStatus(ResponseMessage.SUCCESS_CODE);
+                return resMessage;
+            }
         } catch (Exception e) {
             CommonExceptionHandle.handleException(resMessage, jsonMessage, request, e);
         }

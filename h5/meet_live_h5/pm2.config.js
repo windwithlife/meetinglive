@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
     apps:[{
-        name:'operation_platform_web', // 应用名称
+        name:'meet_live_h5', // 应用名称
         script:"npm run start",
         watch: ['.next'],  // 监控变化的目录，一旦变化，自动重启
         ignore_watch:['node_modules','logs','public'],
@@ -13,8 +13,8 @@ module.exports = {
         error_file: path.join(__dirname,'./logs/error.log'), // 错误日志路径
         merge_logs: true,
         log_date_format: 'YYYY-MM-DD HH:mm:ss',
-        instances:"1", //负载均衡   根据机器CPU核数，开启对应数目的进程运行项目
-        exec_mode : "cluster"
+        // instances:"1", //负载均衡   根据机器CPU核数，开启对应数目的进程运行项目
+        // exec_mode : "cluster"
     }]
 }
 
@@ -28,4 +28,5 @@ module.exports = {
  * pm2 web 监控运行这些进程的机器的状态
  * pm2 describe <id|app_name>
  * pm2 reload all
+ * pm2 delete|del <name|id|namespace|script|all|json|stdin...>
  */

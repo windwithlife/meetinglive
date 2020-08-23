@@ -1,5 +1,5 @@
 {
-  "name": "operation_platform_web",
+  "name": "meet_live_h5",
   "version": "1.0.0",
   "scripts": {
     "devx": "export NODE_ENV=development && node server.js",

@@ -1,7 +1,7 @@
 import React, { useState,useEffect} from 'react';
 import { List, InputItem, WhiteSpace,Picker,Modal } from 'antd-mobile';
 import "./infoAdd.less";
-import {invoke_post} from "../../common/index"
+import {invoke_post,doLogin,isLogin} from "../../common/index"
 
 
 class CustomChildren extends React.Component{
@@ -72,26 +72,31 @@ export default class InfoAdd extends React.Component{
         return;
       }
 
-      if(isWrite == 0) { //0未填写 1已填写
-        let [provinceName,cityName] = pickChineseVal.split(',')
-        let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/updateUserInfo',{
-          userTrueName:name,
-          provinceName,cityName,
-          hospitalName:hospital,
-          departmentName:department,
-        }).then(res=>res.data);
-        this.setState({ isShowinfoAddModule:false})
-      }
+      let [provinceName,cityName] = pickChineseVal.split(',')
+      let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/updateUserInfo',{
+        userTrueName:name,
+        provinceName,cityName,
+        hospitalName:hospital,
+        departmentName:department,
+      }).then(res=>res.data);
+      this.setState({ isShowinfoAddModule:false})
     }catch(error){
       console.error('error: ', error);
     }
   }
 
   async componentDidMount(){
-    let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWriteUserInfo').then(res=>res.data);
-    console.log('doClick result: ', data);
-    let {isWrite} = data;  //0未填写 1已填写
-    if(isWrite == 0) this.setState({ isShowinfoAddModule:true});
+    try{
+      let isLoginFlag = await isLogin();
+      if(!isLoginFlag){
+        await doLogin(location.href);
+      }
+      let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWriteUserInfo').then(res=>res.data);
+      let {isWrite} = data;  //0未填写 1已填写
+      if(isWrite == 0) this.setState({ isShowinfoAddModule:true});
+    }catch(error){
+      console.error('componentDidMount_error',error);
+    }
   }
 
   render(){

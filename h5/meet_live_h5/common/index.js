@@ -20,24 +20,38 @@ export const checkStatus = async response => {
     }
 }
 
+
+
+/**公众号验证当前用户是否登录 */
+export const isLogin = async()=>{
+    const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWechatPublicUserLogin').then((res)=>res.data)
+    const {isLogin} = data; //(0:未登录 1:已登录);
+    if(isLogin == 0) return false;
+    else return true;
+}
+
 /** 登录流程 */
 export const doLogin = async (pageUrl) => {
-    const openId = localStorage.getItem('openId');
-    let code = getQueryVariable('code');
-    if(!!openId || !!code){
-        const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerWechatPublicUser',{
-            openId:openId,
-            code:code,
-        }).then(res=>res?.data);
-        const {openId,token} = data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('openId', openId);
-    }else{
-        const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/getWechatPublicOauthUrl',{
-            href:pageUrl
-        }).then(res=>res?.data)
-        const {oauthUrl} = data;
-        location.href = oauthUrl;
+    try{
+        const outOpenId = localStorage.getItem('openId');
+        let code = getQueryVariable('code');
+        if(!!outOpenId || !!code){
+            const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerWechatPublicUser',{
+                openId:outOpenId,
+                code:code,
+            }).then(res=>res?.data);
+            const {openId,token} = data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('openId', openId);
+        }else{
+            const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/getWechatPublicOauthUrl',{
+                href:pageUrl
+            }).then(res=>res?.data)
+            const {oauthUrl} = data;
+            location.href = oauthUrl;
+        }
+    }catch(error){
+        console.error('doLogin_error',error);
     }
 }
 

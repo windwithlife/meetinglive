@@ -34,7 +34,6 @@ export default class Live extends React.Component{
     }
   }
   async componentDidMount(){
-    await doLogin(location.href);
     this.init();
   }
 

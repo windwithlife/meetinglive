@@ -1,40 +1,97 @@
 import React, { useState,useEffect} from 'react';
-import { List, InputItem, WhiteSpace,Picker } from 'antd-mobile';
+import { List, InputItem, WhiteSpace,Picker,Modal } from 'antd-mobile';
 import "./infoAdd.less";
 import {invoke_post} from "../../common/index"
 
-const CustomChildren = props => (
-    <div onClick={props.onClick} style={{ backgroundColor: '#fff', paddingLeft: 15 }}>
+
+class CustomChildren extends React.Component{
+  constructor(props){
+    super(props)
+  }
+  render(){
+    const props = this.props;
+    props.setPickChineseVal(props.extra)
+    return(
+      <div onClick={props.onClick} style={{ backgroundColor: '#fff', paddingLeft: 15 }}>
         <div className="test" style={{ display: 'flex', height: '45px', lineHeight: '45px',position:'relative',borderBottom:0 }}>
-            <div style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',fontSize:"17px" }}>{props.children}</div>
-            <div style={{ textAlign: 'right', color: '#888', marginRight: 15 }}>{props.extra}</div>
+            <div style={{ width:"45px", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',fontSize:"17px" }}>{props.children}</div>
+            <div style={{ textAlign: 'left', color: '#888', marginRight: 15,fontSize:"17px" }}>{props.extra}</div>
         </div>
-    </div>
-  );
+      </div>
+    )
+  }
+}
+
+
 
 export default class InfoAdd extends React.Component{
   constructor(props){
     super(props);
+    this.name = "";
+    this.hospital = "";
+    this.department = "";
+    this.pickChineseVal  = '';
     this.state = {
-      isShowinfoAddModule:false
+      pickerValue:null,
+      isShowinfoAddModule:false,
     }
   }
+  setPickChineseVal(pickChineseVal){
+    console.log('pickChineseVal: ', pickChineseVal);
+    this.pickChineseVal = pickChineseVal;
+  }
 
-  onChange(val){
-    console.log('val: ', val);
+  onChange(type,val){
+    switch(type){
+      case "NAME" : {
+        this.name = val;
+      }
+      break;
+      case "HOSPITAL" : {
+        this.hospital = val;
+      }
+      break;
+      case "DEPARTMENT" : {
+        this.department = val;
+      }
+      break;
+    }
   }
   onOk(value){
     console.log('value: ', value);
     this.setState({ pickerValue: value })
   }
 
-  async componentDidMount(){
+  async doClick(){
     try{
-      let result = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWriteUserInfo')
-      console.log('result: ', result);
+      let {name,department,hospital,pickChineseVal} = this;
+      console.log('name,department,hospital,pickChineseVal: ', name,department,hospital,pickChineseVal);
+      // let {pickerValue} = this.state;
+      if(!name || !department || !hospital || !pickChineseVal || pickChineseVal=="请选择") {
+        Modal.alert('提示', "信息填写不完整", [{text: '确定',onPress: ()=>{}}])
+        return;
+      }
+
+      if(isWrite == 0) { //0未填写 1已填写
+        let [provinceName,cityName] = pickChineseVal.split(',')
+        let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/updateUserInfo',{
+          userTrueName:name,
+          provinceName,cityName,
+          hospitalName:hospital,
+          departmentName:department,
+        }).then(res=>res.data);
+        this.setState({ isShowinfoAddModule:false})
+      }
     }catch(error){
       console.error('error: ', error);
     }
+  }
+
+  async componentDidMount(){
+    let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWriteUserInfo').then(res=>res.data);
+    console.log('doClick result: ', data);
+    let {isWrite} = data;  //0未填写 1已填写
+    if(isWrite == 0) this.setState({ isShowinfoAddModule:true});
   }
 
   render(){
@@ -72,17 +129,16 @@ export default class InfoAdd extends React.Component{
         <div className="info_add_layer_content_con">
           <div className="info_add_layer_content_title">个人信息填写</div>
           <div className="info_con_bottom_content">
-            <InputItem onChange={this.onChange.bind(this)} clear >姓名</InputItem>
-            <InputItem onChange={this.onChange.bind(this)} clear >医院</InputItem>
-            <InputItem onChange={this.onChange.bind(this)} clear >科室</InputItem>
-            <Picker title="选择地区" extra="请选择(可选)" data={antdDistrict} 
+            <InputItem onChange={this.onChange.bind(this,"NAME")} clear >姓名</InputItem>
+            <InputItem onChange={this.onChange.bind(this,"HOSPITAL")} clear >医院</InputItem>
+            <InputItem onChange={this.onChange.bind(this,"DEPARTMENT")} clear >科室</InputItem>
+            <Picker title="选择地区" extra="请选择" data={antdDistrict} 
                     value={this.state.pickerValue} 
-                    onChange={v => this.setState({ pickerValue: v })}
                     onOk={this.onOk.bind(this)}
                 >
-                    <CustomChildren>省份</CustomChildren>
+                    <CustomChildren setPickChineseVal={this.setPickChineseVal.bind(this)}>省份</CustomChildren>
                 </Picker>
-            <div className="submit">提交</div>
+            <div className="submit" onClick={this.doClick.bind(this)}>提交</div>
           </div>
         </div>
       </div>

@@ -2,8 +2,9 @@ import React, { useState,useEffect} from 'react';
 import { List, InputItem, WhiteSpace,Picker } from 'antd-mobile';
 import "./index.less";
 import InfoAdd from "./InfoAdd"
-import {invoke_post} from "../../common/index"
-import Item from 'antd-mobile/lib/popover/Item';
+import {invoke_post, doLogin} from "../../common/index"
+
+
 
 
 export default class Live extends React.Component{
@@ -32,7 +33,8 @@ export default class Live extends React.Component{
       console.error('error: ', error);
     }
   }
-  componentDidMount(){
+  async componentDidMount(){
+    await doLogin(location.href);
     this.init();
   }
 
@@ -73,25 +75,28 @@ export default class Live extends React.Component{
         </div>
       </div>
     )
-    const info_con_bottom_module = (
-      <div className="info_con_bottom">
-        <>
-          <div onClick={this.tapClick.bind(this,"LEFT")}
-            style={whichTap=="LEFT"?{background:"#AB956D",color:"#fff"}:{}} 
-            className="info_con_bottom_left_tap tap">
-            会议日程
-          </div>
-          <div  onClick={this.tapClick.bind(this,"RIGHT")}
-          style={whichTap=="RIGHT"?{background:"#AB956D",color:"#fff"}:{}}
-          className="info_con_bottom_right_tap tap">
-            会议介绍
-          </div>
-          <img className="desc_img" src={
-            whichTap == "LEFT" ? initData.roomSchedulePath : initData.roomDescPath
-          } />
-        </>
-      </div>
-    )
+    let info_con_bottom_module = null;
+    if(!!Object.keys(initData).length){
+      info_con_bottom_module = (
+        <div className="info_con_bottom">
+          <>
+            <div onClick={this.tapClick.bind(this,"LEFT")}
+              style={whichTap=="LEFT"?{background:"#108ee9",color:"#fff"}:{}} 
+              className="info_con_bottom_left_tap tap">
+              会议日程
+            </div>
+            <div  onClick={this.tapClick.bind(this,"RIGHT")}
+            style={whichTap=="RIGHT"?{background:"#108ee9",color:"#fff"}:{}}
+            className="info_con_bottom_right_tap tap">
+              会议介绍
+            </div>
+            <img className="desc_img" src={
+              whichTap == "LEFT" ? initData.roomSchedulePath : initData.roomDescPath
+            } />
+          </>
+        </div>
+      )
+    }
 
     return (
       <div className="live_container">

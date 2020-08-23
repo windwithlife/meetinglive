@@ -7,15 +7,11 @@ export default class extends React.Component {
     constructor(props){
         super(props);
     }
-    onOk(value){
 
-    }
- 
     render(){       
         return (
             <div>
-                
-               123
+                this is index page
             </div>
         )
     }

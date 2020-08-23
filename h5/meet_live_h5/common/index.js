@@ -4,20 +4,11 @@
  */
 import axios from "axios";
 import { Modal } from "antd-mobile";
-import {Loading} from "./tools";
+import {Loading,getQueryVariable} from "./tools";
 
 const isServer = typeof window == 'undefined';
 
-/** 登录流程 */
-export const doLogin = async response => {
-    // if (response.status >= 200 && response.status < 300) {
-    //     return response.data
-    // } else {
-    //     var error = new Error((response && response.statusText) || 'text')
-    //     error.response = response
-    //     throw error
-    // }
-}
+
 
 export const checkStatus = async response => {
     if (response.status >= 200 && response.status < 300) {
@@ -29,7 +20,28 @@ export const checkStatus = async response => {
     }
 }
 
-function dealToken(result) {
+/** 登录流程 */
+export const doLogin = async (pageUrl) => {
+    const openId = localStorage.getItem('openId');
+    let code = getQueryVariable('code');
+    if(!!openId || !!code){
+        const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerWechatPublicUser',{
+            openId:openId,
+            code:code,
+        }).then(res=>res?.data);
+        const {openId,token} = data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('openId', openId);
+    }else{
+        const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/getWechatPublicOauthUrl',{
+            href:pageUrl
+        }).then(res=>res?.data)
+        const {oauthUrl} = data;
+        location.href = oauthUrl;
+    }
+}
+
+async function dealToken(result) {
     // console.log('result: ', result);
     let { token = '', status, data } = result;//status 响应状态(0:失败 1:成功  2:未登录)
     if (!!data.token) token = data.token;
@@ -44,7 +56,7 @@ function dealToken(result) {
             return result;
         }
         case 2: {
-            
+            await doLogin(location.href);
             return result;
         }
     }
@@ -57,6 +69,7 @@ export async function invoke_post(url, params = {}) {
         axios.defaults.withCredentials = true;
         axios.defaults.crossDomain = true;
         let token = localStorage.getItem('token');
+        let openId = localStorage.getItem('openId');
         let result = await axios({
             headers: {
                 'Content-Type': 'application/json'
@@ -64,10 +77,10 @@ export async function invoke_post(url, params = {}) {
             method: 'post',
             url,
             data: { 
-                platType: 4, category: 1, version: 1, platType: 3, platForm:"wechat_official_account", token, openId:"",
+                platType: 4, category: 1, version: 1, platType: 3, platForm:"wechat_official_account", token, openId,
                 data: params 
             }
-        }).then(checkStatus).then(dealToken)
+        }).then(checkStatus).then(dealToken);
         Loading.hide();
         return result;
     } catch (error) {

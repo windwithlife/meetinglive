@@ -24,7 +24,6 @@ export default class Live extends React.Component{
       let data = await invoke_post('advertService/getLiveDetail',{
         id:query?.id
       }).then(result=>result?.data)
-      // console.log('data: ', data);
       this.setState({initData:data},()=>{
         const {videoMp4Url,pullFlvUrl,roomPicPath} = data;
         this.loadPlayer(videoMp4Url,roomPicPath); 

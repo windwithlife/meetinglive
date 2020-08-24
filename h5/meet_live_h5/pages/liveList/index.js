@@ -7,7 +7,7 @@ import {invoke_post} from "../../common/index"
 let totalPage = null;
 let currentPage = 1;
 
-function Live(props){
+function Live(){
   function doClick(item){
     let {id} = item;
     location.href = `${location.origin}/live?id=${id}`;

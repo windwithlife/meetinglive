@@ -1,14 +1,13 @@
-import React, { useState,useEffect} from 'react';
-import { List, InputItem, WhiteSpace,Picker } from 'antd-mobile';
+import React from 'react';
 import "./index.less";
 import InfoAdd from "./InfoAdd"
-import {invoke_post, doLogin} from "../../common/index"
+import {invoke_post} from "../../common/index"
 
 
 
 
 export default class Live extends React.Component{
-  static async getInitialProps({req,res,router,Component}) {
+  static async getInitialProps({router}) {
     return { router };
   }
   constructor(props){
@@ -25,7 +24,7 @@ export default class Live extends React.Component{
         id:query?.id
       }).then(result=>result?.data)
       this.setState({initData:data},()=>{
-        const {videoMp4Url,pullFlvUrl,roomPicPath} = data;
+        const {videoMp4Url,roomPicPath} = data;
         this.loadPlayer(videoMp4Url,roomPicPath); 
       })
     }catch(error){
@@ -74,7 +73,7 @@ export default class Live extends React.Component{
       </div>
     )
     let info_con_bottom_module = null;
-    if(!!Object.keys(initData).length){
+    if(Object.keys(initData).length){
       info_con_bottom_module = (
         <div className="info_con_bottom">
           <>

@@ -24,7 +24,7 @@ export const checkStatus = async response => {
 
 /**公众号验证当前用户是否登录 */
 export const isLogin = async()=>{
-    const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWechatPublicUserLogin').then((res)=>res.data)
+    const data = await invoke_post('userService/validateWechatPublicUserLogin').then((res)=>res.data)
     const {isLogin} = data; //(0:未登录 1:已登录);
     if(isLogin == 0) return false;
     else return true;
@@ -36,7 +36,7 @@ export const doLogin = async (pageUrl) => {
         const outOpenId = localStorage.getItem('openId');
         let code = getQueryVariable('code');
         if(!!outOpenId || !!code){
-            const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/registerWechatPublicUser',{
+            const data = await invoke_post('wechatService/registerWechatPublicUser',{
                 openId:outOpenId,
                 code:code,
             }).then(res=>res?.data);
@@ -44,7 +44,7 @@ export const doLogin = async (pageUrl) => {
             localStorage.setItem('token', token);
             localStorage.setItem('openId', openId);
         }else{
-            const data = await invoke_post('https://service.koudaibook.com/meeting-server/api/wechatService/getWechatPublicOauthUrl',{
+            const data = await invoke_post('wechatService/getWechatPublicOauthUrl',{
                 href:pageUrl
             }).then(res=>res?.data)
             const {oauthUrl} = data;
@@ -78,6 +78,7 @@ async function dealToken(result) {
 }
 
 export async function invoke_post(url, params = {}) {
+    let baseUrl = 'https://service.koudaibook.com/meeting-server/api/';
     try {
         Loading.show();
         axios.defaults.withCredentials = true;
@@ -89,7 +90,7 @@ export async function invoke_post(url, params = {}) {
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url,
+            url:`${baseUrl}${url}`,
             data: { 
                 platType: 4, category: 1, version: 1, platType: 3, platForm:"wechat_official_account", token, openId,
                 data: params 
@@ -104,24 +105,5 @@ export async function invoke_post(url, params = {}) {
     }
 }
 
-export async function uploadFile(file) {
-    try {
-        Loading.show();
-        let formData = new FormData();
-        let token = localStorage.getItem('token');
-        let json = { token, platType: 4, category: 1, version: 1, platForm: "web" };
-        formData.append('json', JSON.stringify(json))
-        formData.append('file', file);
 
-        let result = await axios.post('https://service.koudaibook.com/meeting-server/uploadService/uploadImage', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(checkStatus).then(dealToken)
-        Loading.hide();
-        return result;
-    } catch (error) {
-        Loading.hide();
-        console.error('---invoke_uploadFile_error---: ', error);
-        throw error;
-    }
-}
 

@@ -73,7 +73,7 @@ export default class InfoAdd extends React.Component{
       }
 
       let [provinceName,cityName] = pickChineseVal.split(',')
-      let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/updateUserInfo',{
+      let data = await invoke_post('userService/updateUserInfo',{
         userTrueName:name,
         provinceName,cityName,
         hospitalName:hospital,
@@ -91,7 +91,7 @@ export default class InfoAdd extends React.Component{
       if(!isLoginFlag){
         await doLogin(location.href);
       }
-      let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/validateWriteUserInfo').then(res=>res.data);
+      let data = await invoke_post('userService/validateWriteUserInfo').then(res=>res.data);
       let {isWrite} = data;  //0未填写 1已填写
       if(isWrite == 0) this.setState({ isShowinfoAddModule:true});
     }catch(error){

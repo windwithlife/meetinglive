@@ -21,7 +21,7 @@ export default class Live extends React.Component{
   async init(){
     try{
       let {query} = this.props.router;
-      let data = await invoke_post('https://service.koudaibook.com/meeting-server/api/advertService/getLiveDetail',{
+      let data = await invoke_post('advertService/getLiveDetail',{
         id:query?.id
       }).then(result=>result?.data)
       // console.log('data: ', data);

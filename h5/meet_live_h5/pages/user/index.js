@@ -21,7 +21,7 @@ export default class User extends Component {
 
 	async getUserInfo() {
 		await doLogin(location.href);
-		let userInfo = await invoke_post('https://service.koudaibook.com/meeting-server/api/userService/getUserInfo', {}).then((result)=>result?.data);
+		let userInfo = await invoke_post('userService/getUserInfo', {}).then((result)=>result?.data);
 		// let userInfo = {
 		// 	"id": 0,
 		// 	"userNickName": '高小锐',

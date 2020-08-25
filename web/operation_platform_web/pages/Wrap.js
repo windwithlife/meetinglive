@@ -1,6 +1,8 @@
 import { Layout, Menu } from 'antd';
 const { Content, Sider, Footer } = Layout;
 import "./styles/wrap.less"
+import { reaction } from 'mobx';
+import { Button } from 'antd';
 
 
 
@@ -52,16 +54,16 @@ export default class Wrap extends React.Component {
     if(asPath == '/')  return  ( <>{this.props.children}</> )
     return (
       <>   
-        <Layout style={{ height: '100%' }}>
+        <Layout style={{ height: '100%'}}>
           <Head></Head>
-          <Content style={{ height: 'calc(100% - 34px)', overflow: 'auto' }}>
-            <Layout style={{ height: '100%' }}>
-              <Sider style={{ background: "#fff" }}>
+          <Content style={{ height: 'calc(100% - 34px)', overflow: 'scroll' }}>
+            <Layout style={{ height: '100%',flexDirection: 'row' }}>
+              <Sider style={{ background: "#fff",height:"100%" }}>
                 <Menu onClick={this.handleClick.bind(this)} defaultSelectedKeys={[defaultSelectedKeys]} mode="inline">
                   { menuList.map((item)=> <Menu.Item key={item.key}>{item.desc}</Menu.Item>) }
                 </Menu>
               </Sider>
-              <Content>
+              <Content style={{height:'100%'}}>
                 {this.props.children}
               </Content>
             </Layout>
@@ -72,4 +74,7 @@ export default class Wrap extends React.Component {
     )
   }
 }
+
+
+
 

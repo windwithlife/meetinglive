@@ -19,6 +19,7 @@ module.exports = {
 }
 
 /**
+ * https://pm2.keymetrics.io/docs/usage/quick-start/
  * pm2 start
  * pm2 show (appname|id) 查看详细状态信息
  * pm2 monit 监控每个 node 进程的 cpu 和内存使用情况

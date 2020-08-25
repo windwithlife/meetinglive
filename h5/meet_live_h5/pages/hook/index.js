@@ -1,24 +1,32 @@
 
-import React, { useState,useEffect} from 'react';
+import React, { useState} from 'react';
 
-let [count,setCount] = useState(0);
-// function doCick(){
-//     setCount(++count)
-// }
+function useCommon(){
+    let [count,setCount] = useState(0);
+    function doClick(){
+        setCount(++count)
+    }
+    return {
+        count,doClick
+    }
+}
+
+function A(){
+    let {doClick,count} = useCommon();
+    return (
+    <h1 onClick={()=>doClick()}>A_{count}</h1>
+    )
+}
+ 
+function B(){
+    let {doClick,count} = useCommon();
+
+    return (
+        <h1 onClick={()=>doClick()}>B_{count}</h1>
+    )
+}
 
 export default function Index(){
-    function A(){
- 
-        return (
-            <h1 onClick={()=>doClick()}>A</h1>
-        )
-    }
-    function B(){
-     
-        return (
-            <h1 onClick={()=>doClick()}>B</h1>
-        )
-    }
     return (
         <>
             <A></A>
@@ -26,4 +34,3 @@ export default function Index(){
         </>
     )
 }
-

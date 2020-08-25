@@ -64,7 +64,7 @@ export default class LectureSetting extends React.Component{
         //     pullFlvUrl:"https://www.baidu.com/?tn=02003390_43_hao_pg", //拉流地址,
         //     videoMp4Url:"https://www.baidu.com/?tn=02003390_43_hao_pg", //录播地址
         // }]
-
+        if(!liveList.length) return null;
         return(
             <div className="lecture_setting_con">
                 <Button className="new_setup_btn" onClick={this.newSetUp.bind(this)}>新建会议</Button>

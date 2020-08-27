@@ -3,6 +3,7 @@ import React from 'react'
 import  initializeStore  from '../models/index';
 import { Provider } from 'mobx-react'
 import Wrap from './Wrap'
+import Head from 'next/head'
 import "./styles/_app.less";
 
 
@@ -34,11 +35,21 @@ class MyApp extends App {
     render() {
         const { Component, ComponentInitProps={} ,WrapInitialProps={} } = this.props;
         return (
-            <Provider {...this.mobxStore}>
-                <Wrap {...WrapInitialProps}>
-                    <Component {...ComponentInitProps}/>
-                </Wrap>
-            </Provider>
+            <>
+                <Head>
+                    <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <style>{`
+                    body { margin:0 } 
+                    #__next {height:100%}
+                    `}</style>
+                </Head>
+                <Provider {...this.mobxStore}>
+                    <Wrap {...WrapInitialProps}>
+                        <Component {...ComponentInitProps}/>
+                    </Wrap>
+                </Provider>
+            </>
         )
     }
 }

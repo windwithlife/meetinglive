@@ -1,5 +1,5 @@
 {
-  "name": "operation_platform_web",
+  "name": "meet_live_h5",
   "version": "1.0.0",
   "scripts": {
     "devx": "export NODE_ENV=development && node server.js",
@@ -36,6 +36,9 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-decorators": "^7.1.0",
     "cross-env": "^7.0.2",
+    "eslint": "^7.7.0",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "express-urlrewrite": "^1.2.0",
     "webpack": "^4.29.3"
   },

@@ -186,7 +186,6 @@ public class ApiUsersController {
      * @return
      */
     @PostMapping(value = { "/getRegionList" }, consumes = { "application/json" }, produces = { "application/json" })
-    @LoginRequired
     public @ResponseBody ResponseMessage getRegionList(@RequestBody JsonMessage jsonMessage,
                                                        HttpServletRequest request,
                                                        HttpServletResponse response) {

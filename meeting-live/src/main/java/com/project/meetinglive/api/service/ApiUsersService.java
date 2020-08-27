@@ -56,7 +56,7 @@ public class ApiUsersService {
         //返回信息
         Map<String, Object> returnMap = new HashMap<String, Object>();
         //step1:获取全部请求参数并验证
-        String userNickName = EmojiFilterUtil.decode(jsonMessage.getString("userNickName"));
+        String userNickName =jsonMessage.getString("userNickName");// EmojiFilterUtil.decode(jsonMessage.getString("userNickName"));
         String headPic = jsonMessage.getString("headPic");
         Byte userGrenderWx = jsonMessage.getByte("userGrenderWx");
         String userCountryWx = jsonMessage.getString("userCountryWx");
@@ -181,7 +181,9 @@ public class ApiUsersService {
      */
     public void updateUserInfo(JsonMessage jsonMessage) throws Exception {
         //step1:信息转换
+        int userId = UserTokenHelp.getWechatUserId(jsonMessage.getToken());
         UserInfoVo userInfoVo = JSONObject.toJavaObject(jsonMessage.getData(), UserInfoVo.class);
+        userInfoVo.setId(userId);
         UsersModel.validateUpdateUserInfoParam(userInfoVo);
         //step2:修改用户及明细信息
         UsersModel usersModel = this.usersDao.getUsersModel(userInfoVo.getId());
@@ -266,6 +268,7 @@ public class ApiUsersService {
         //step2:获取微信用户信息
         Oauth2AccessToken accessToken=null;
         String accessTokenStr=null;
+        WechatUserInfo  userInfo=null;
         if (StringUtils.isNotEmpty(code) && StringUtils.isEmpty(openId)) {
             accessToken = AdvancedUtil.getOauth2AccessToken(code);
             if(accessToken==null) {
@@ -278,20 +281,21 @@ public class ApiUsersService {
                 logger.error("获取微信ID失败,请重新打开页面,参数信息:code--->{},openId--->{}", code,openId);
                 throw new ServiceException("微信授权登录失败,请重新打开页面!");
             }
+            if(StringUtils.isNotEmpty(openId)) {
+                accessTokenStr=AdvancedUtil.getAccessTokenByCache();
+            }
+            if(StringUtils.isBlank(accessTokenStr)) {
+                logger.error("获取微信accessToken失败,请重新打开页面,参数信息:openId--->{},code--->{}",openId,accessTokenStr);
+                throw new ServiceException("微信授权登录失败,请重新打开页面!");
+            }
+            //step3:根据accessToken和openId获取用户信息
+             userInfo=AdvancedUtil.getOauthUserInfo(accessTokenStr, openId);
+            if(userInfo==null) {
+                logger.error("获取公众号授权用户信息返回为空,参数信息:accessToken--->{},openId--->{}", accessTokenStr,openId);
+                throw new ServiceException("微信授权登录失败,请重新打开页面!");
+            }
         }
-        if(StringUtils.isNotEmpty(openId)) {
-            accessTokenStr=AdvancedUtil.getAccessTokenByCache();
-        }
-        if(StringUtils.isBlank(accessTokenStr)) {
-            logger.error("获取微信accessToken失败,请重新打开页面,参数信息:openId--->{},code--->{}",openId,accessTokenStr);
-            throw new ServiceException("微信授权登录失败,请重新打开页面!");
-        }
-        //step3:根据accessToken和openId获取用户信息
-        WechatUserInfo  userInfo=AdvancedUtil.getOauthUserInfo(accessTokenStr, openId);
-        if(userInfo==null) {
-            logger.error("获取公众号授权用户信息返回为空,参数信息:accessToken--->{},openId--->{}", accessTokenStr,openId);
-            throw new ServiceException("微信授权登录失败,请重新打开页面!");
-        }
+       
         //step4:请求带有token，则直接清除
         String token = jsonMessage.getToken();
         if (StringUtils.isNotBlank(token)) {
@@ -299,7 +303,7 @@ public class ApiUsersService {
         }
         //step3:根据手机号查询用户信息
         Map<String, String>  paraMap=new HashMap<String, String>();
-        paraMap.put("unionId", userInfo.getUnionid());
+        paraMap.put("unionId",userInfo==null?null:userInfo.getUnionid());
         paraMap.put("openId", openId);
         UsersModel usersModel = this.usersDao.selectUserByunionIdOrOpenId(paraMap);
         if (usersModel != null) {//重新生成token信息
@@ -324,13 +328,14 @@ public class ApiUsersService {
             userParamMap.put("userId", userId);
             userParamMap.put("userToken", newToken);
             this.usersDao.updateUserToken(userParamMap);
-
-            Map<String, Object> usersMap = new HashMap<String, Object>();
-            usersMap.put("userId", userId);
-            usersMap.put("headPic", userInfo.getHeadimgurl());
-            usersMap.put("userNickName", userInfo.getNickname());
-            usersMap.put("updatedName", userInfo.getNickname());
-            this.usersDao.updateUserNickName(usersMap);
+            if(userInfo!=null) {
+                Map<String, Object> usersMap = new HashMap<String, Object>();
+                usersMap.put("userId", userId);
+                usersMap.put("headPic", userInfo.getHeadimgurl());
+                usersMap.put("userNickName", userInfo.getNickname());
+                usersMap.put("updatedName", userInfo.getNickname());
+                this.usersDao.updateUserNickName(usersMap);
+            }
             //step5:存入到redis
             JedisHelper.getInstance().set(newToken, value, JedisDBEnum.WECHAT);
             //step6:返回信息

@@ -30,7 +30,7 @@ const fs = require('fs')
 const path = require('path')
 var configfile = require('./config/config');
 let resourcePath = configfile['current'].RESOURCE_PATH;
-resourcePath = "/" + resourcePath;
+//resourcePathMatchSource = resourcePath + "/_next/:slug*";
 // Where your antd-custom.less file lives
 const themeVariables = lessToJS(
   fs.readFileSync(path.resolve(__dirname, './assets/antd-custom.less'), 'utf8')
@@ -43,12 +43,8 @@ module.exports = withLess({
   async rewrites() {
     return [
       {
-        source: '/about',
-        destination: '/test',
-      },
-      {
-        source: '/generic/_next',
-        destination: '/_next',
+        source: resourcePath + '/_next/:slug*',
+        destination: '/_next/:slug*',
       },
     ]
   },

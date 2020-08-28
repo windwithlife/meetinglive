@@ -128,7 +128,7 @@ module.exports = {
     WEB_GATE: routeToWeb(),
     WEB_RELEASE: routeToWebRelease(),
     UPLOAD_PATH: uploadRoot(),
-    RESOURCE_PATH: "generic",
+    RESOURCE_PATH: "/generic",
    }
 }
 

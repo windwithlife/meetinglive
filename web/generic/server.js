@@ -12,26 +12,26 @@ var uploadRootPath = config['current'].UPLOAD_PATH;
 console.log("current upload root path"  + uploadRootPath);
 var fileupload = require('./utils/fileupload').fileupload;
 
-var config = require('./config/config');
+//var config = require('./config/config');
 
-let resourcePath = config['current'].RESOURCE_PATH;
-let resPath = "" + resourcePath + "/_next";
+//let resourcePath = config['current'].RESOURCE_PATH;
+//let resPath = "" + resourcePath + "/_next";
 
 app.prepare()
   .then(() => {
     const server = express()
     server.use(bodyParser.urlencoded({ extended: true }));
     server.use(bodyParser.json());
-    server.use('/images',express.static(uploadRootPath));
+    //server.use('/images',express.static(uploadRootPath));
     //server.use(rewrite(/^\/coder\/?(.*)/,'/$1'));
     // server.get('/a', (req, res) => {
     //   return app.render(req, res, '/b', req.query)
     // })
-    server.use(function (req, res, next) {
+    //server.use(function (req, res, next) {
       //req.url = req.originalUrl.replace('MedicalLive/_next', '_next');
-      req.url = req.originalUrl.replace(resPath, '_next');
-      next(); // be sure to let the next middleware handle the modified request. 
-    });
+      //req.url = req.originalUrl.replace(resPath, '_next');
+      //next(); // be sure to let the next middleware handle the modified request. 
+    //});
 
     server.post('/profile', fileupload.single('avatar'), function (req, res, next) {
       // req.file is the `avatar` file

@@ -25,7 +25,7 @@ export default class EditPage extends React.Component {
   formRef = React.createRef();
 
   Store=()=>{
-    return this.props.categorysStore;
+    return this.props.categoryStore;
   }
   onFinish = values => {
    router.back();

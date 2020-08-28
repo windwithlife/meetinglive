@@ -24,7 +24,7 @@ export default class AddPage extends React.Component {
     }
 
     Store = () => {
-        return this.props.categorysStore;
+        return this.props.categoryStore;
     }
 
     onFinish = values => {

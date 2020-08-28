@@ -34,7 +34,7 @@ export default class DetailPage extends React.Component {
 
     }
     Store(){
-        return this.props.categorysStore;
+        return this.props.categoryStore;
     }
     startHeader() {
         var that = this;

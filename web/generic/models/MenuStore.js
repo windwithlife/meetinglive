@@ -37,7 +37,7 @@ export default class MenuStore extends BaseStore{
     {id:12,name: "直播资讯",url:"/live/home",level:1,type:'sider', parentId:0,channelName:"live"},
   
 
-    {id:5,name: "配置",url:"/public/config/home",level:1,type:'sider', parentId:0,channelName:"config"},
+    {id:5,name: "配置",url:"/public/category/add",level:1,type:'sider', parentId:0,channelName:"config"},
 
     {id:51,name: "个人基本信息",url:"/user/home",level:1,type:'sider', parentId:0,channelName:"user"},
     {id:52,name: "密码与权限",url:"/account/home",level:1,type:'sider', parentId:0,channelName:"user"},
@@ -45,7 +45,7 @@ export default class MenuStore extends BaseStore{
    
     {id:103,name: "资讯管理",url:"/live/info_home",level:1,type:'header', parentId:0,channelName:"default"},
     {id:104,name: "直播管理",url:"/live/liveroom_home",level:1,type:'header', parentId:0,channelName:"default"},
-    {id:105,name: "配置",url:"/public/personal/detail",level:1,type:'header', parentId:0,channelName:"default"},
+    {id:105,name: "配置",url:"/public/category/add",level:1,type:'header', parentId:0,channelName:"default"},
 ],
   };
 

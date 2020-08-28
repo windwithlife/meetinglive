@@ -28,17 +28,31 @@ const withLess = require('@zeit/next-less')
 const lessToJS = require('less-vars-to-js')
 const fs = require('fs')
 const path = require('path')
-
+var configfile = require('./config/config');
+let resourcePath = configfile['current'].RESOURCE_PATH;
+resourcePath = "/" + resourcePath;
 // Where your antd-custom.less file lives
 const themeVariables = lessToJS(
   fs.readFileSync(path.resolve(__dirname, './assets/antd-custom.less'), 'utf8')
 )
 
 module.exports = withLess({
-  publicRuntimeConfig: {
-    staticFolder: '/MedicalLive/static',
+  // publicRuntimeConfig: {
+  //   staticFolder: '/MedicalLive/static',
+  // },
+  async rewrites() {
+    return [
+      {
+        source: '/about',
+        destination: '/test',
+      },
+      {
+        source: '/generic/_next',
+        destination: '/_next',
+      },
+    ]
   },
-  assetPrefix:  "/MedicalLive",
+  assetPrefix: resourcePath,
   lessLoaderOptions: {
     javascriptEnabled: true,
     modifyVars: themeVariables, // make your antd custom effective

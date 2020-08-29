@@ -1,5 +1,7 @@
 package com.project.meetinglive.core.wechat;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +123,12 @@ public class AdvancedUtil {
               logger.error("获取公众号授权用户信息返回结果为空!参数信息:accessToken-->{},openId-->{},result-->{}",accessToken, openId, result);
               return null;
           }
+          try {
+            result=new String(result.getBytes("ISO-8859-1"),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("获取公众号授权用户信息转码异常!", e);
+            return null;
+        }
           JSONObject jsonObject = JSONObject.parseObject(result);
           int errcode = jsonObject.getIntValue("errcode");
           if (errcode != 0) {

@@ -281,6 +281,8 @@ public class ApiUsersService {
                 logger.error("获取微信ID失败,请重新打开页面,参数信息:code--->{},openId--->{}", code,openId);
                 throw new ServiceException("微信授权登录失败,请重新打开页面!");
             }
+        }
+        if(StringUtils.isNotBlank(openId)) {
             if(StringUtils.isNotEmpty(openId)) {
                 accessTokenStr=AdvancedUtil.getAccessTokenByCache();
             }
@@ -295,7 +297,6 @@ public class ApiUsersService {
                 throw new ServiceException("微信授权登录失败,请重新打开页面!");
             }
         }
-       
         //step4:请求带有token，则直接清除
         String token = jsonMessage.getToken();
         if (StringUtils.isNotBlank(token)) {
@@ -306,6 +307,7 @@ public class ApiUsersService {
         paraMap.put("unionId",userInfo==null?null:userInfo.getUnionid());
         paraMap.put("openId", openId);
         UsersModel usersModel = this.usersDao.selectUserByunionIdOrOpenId(paraMap);
+        
         if (usersModel != null) {//重新生成token信息
             //验证用户状态
             byte userStatus = usersModel.getUserStatus();
